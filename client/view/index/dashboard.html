@@ -1,0 +1,56 @@
+<template name="dashboard">
+    <button type="button" class="btn btn-info btn-lg logout-btn">Logout</button>
+
+    {{#if IsLogin}}
+    <div class="content" style="display: none">
+        <nav class="navbar navbar-default">
+            <div class="container-fluid">
+                <div class="navbar-header">
+                    <a class="navbar-brand" href="#">Catalog App</a>
+                </div>
+                <div>
+                    <ul class="nav navbar-nav">
+                        <li class="active"><a class="nav-tab" href="#" value="overview">Overview</a></li>
+                        <li><a class="nav-tab" href="#" value="add-pile">Add Pile</a></li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+
+        <div id="Overview" class="page-item">
+
+        </div>
+
+        <div id="AddPile" class="page-item" style="display:none;">
+            <h2>Add Pile</h2>
+            <div class="pile-form">
+                <div class="alert alert-danger" style="display:none;">
+                    <strong>Error!</strong> occured.
+                </div>
+                <div class="form-group">
+                    <label>Pile Name:</label>
+                    <input type="email" class="form-control">
+                </div>
+                <div class="form-group">
+                    <label>Page:</label>
+                    <input type="number" step="1" min="1" class="form-control">
+                </div>
+                <div class="form-group">
+                    <label>Table:</label>
+                    <table id="AddPileTable" class="table table-bordered">
+                        <thead>
+                            <th>Section</th>
+                        </thead>
+                        <tbody>
+
+                        </tbody>
+                    </table>
+                    <button class="table-add-col">Add Column</button>
+                    <button class="table-add-row">Add Row</button>
+                </div>
+                <button class="btn btn-success btn-add-pile">Submit</button>
+            </div>
+        </div>
+    </div>
+    {{/if}}
+</template>

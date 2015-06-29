@@ -22,5 +22,7 @@ Router.route('/about', function () {
 Router.route('/thanks', function () {
     this.render('thanks');
 });
-
+Router.route('/dashboard', function () {
+    this.render('dashboard');
+});
 

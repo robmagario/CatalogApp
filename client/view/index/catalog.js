@@ -1,11 +1,12 @@
-var Swiper;
+//var Swiper;
 
-Template.main.helpers;
+//Template.main.helpers;
 
-Swiper = new Swipe(['catalog', 'navhowto', 'index', 'thanks']);
+//Swiper = new Swipe(['catalog', 'navhowto', 'index', 'thanks']);
 
-Template.main.rendered = function() {};
+//Template.main.rendered = function() {};
 
+/*
 Swiper.setInitialPage('catalog');
 
 Tracker.autorun(function() {});
@@ -31,3 +32,4 @@ Tracker.autorun(function() {});
 if (Swiper.pageIs('thanks')) {
     Swiper.leftRight('index', null);
 }
+    */

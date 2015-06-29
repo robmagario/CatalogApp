@@ -10,3 +10,7 @@ iron:router
 less
 twbs:bootstrap
 ccorcos:swipe
+
+email
+accounts-base
+accounts-password
