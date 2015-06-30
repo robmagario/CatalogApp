@@ -11,7 +11,7 @@
                 <div>
                     <ul class="nav navbar-nav">
                         <li class="active"><a class="nav-tab" href="#" value="overview">Overview</a></li>
-                        <li><a class="nav-tab" href="#" value="add-pile">Add Pile</a></li>
+                        <li><a class="nav-tab" href="#" value="add-pile">Add PDF</a></li>
                     </ul>
                 </div>
             </div>
@@ -21,34 +21,64 @@
 
         </div>
 
-        <div id="AddPile" class="page-item" style="display:none;">
-            <h2>Add Pile</h2>
+        <div id="AddPDF" class="page-item" style="display:none;">
+            <h2>Add PDF</h2>
             <div class="pile-form">
                 <div class="alert alert-danger" style="display:none;">
                     <strong>Error!</strong> occured.
                 </div>
                 <div class="form-group">
-                    <label>Pile Name:</label>
-                    <input type="email" class="form-control">
+                    <label>Directory Name:</label>
+                    <input type="text" class="form-control">
                 </div>
                 <div class="form-group">
-                    <label>Page:</label>
-                    <input type="number" step="1" min="1" class="form-control">
+                    <label>PDF File:</label>
+                    <!--{{> upload_semanticUI fileTypes='.png' multiple=true callbacks=uploadCallbacks}}-->
+                    <input type="file" class="jqUploadclass" data-form-data='{{ submitData }}'>
+                    {{#with infoLabel}}
+                        {{ infoLabel}} <button class="start">StartUpload</button>
+                        <div style="width: 200px; height: 30px; border: 1px solid black">
+                            <!--<div style="background: red; height: 30px; width: {{ progress }}">-->
+                                <!--{{ progress }}-->
+                            <!--</div>-->
+                        </div>
+                    {{/with}}
                 </div>
-                <div class="form-group">
-                    <label>Table:</label>
-                    <table id="AddPileTable" class="table table-bordered">
-                        <thead>
-                            <th>Section</th>
-                        </thead>
-                        <tbody>
+                <!--<div class="form-group">-->
+                    <!--<li class="list-group-item">-->
+                        <!--<label>Simple</label>-->
+                        <!--<pre class="well">&#123;&#123;&gt; upload_bootstrap &#125;&#125;</pre>-->
+                        <!--{{> upload_bootstrap }}-->
+                    <!--</li>-->
+                <!--</div>-->
+                <!--<div class="form-group">-->
+                    <!--<form method="POST" enctype="multipart/form-data">-->
+                        <!--<input type="file" class="jqUploadclass" data-form-data='{{ submitData }}'>-->
+                        <!--{{#with infoLabel}}-->
+                            <!--{{ infoLabel}} <button class="start">StartUpload</button>-->
+                            <!--<div style="width: 200px; height: 30px; border: 1px solid black">-->
+                                <!--<div style="background: red; height: 30px; width: {{ progress }}">-->
+                                    <!--{{ progress }}-->
+                                <!--</div>-->
+                            <!--</div>-->
+                        <!--{{/with}}-->
 
-                        </tbody>
-                    </table>
-                    <button class="table-add-col">Add Column</button>
-                    <button class="table-add-row">Add Row</button>
-                </div>
-                <button class="btn btn-success btn-add-pile">Submit</button>
+                    <!--</form>-->
+                <!--</div>-->
+                <!--<div class="form-group">-->
+                    <!--<label>Table:</label>-->
+                    <!--<table id="AddPileTable" class="table table-bordered">-->
+                        <!--<thead>-->
+                            <!--<th>Section</th>-->
+                        <!--</thead>-->
+                        <!--<tbody>-->
+
+                        <!--</tbody>-->
+                    <!--</table>-->
+                    <!--<button class="table-add-col">Add Column</button>-->
+                    <!--<button class="table-add-row">Add Row</button>-->
+                <!--</div>-->
+                <button id="SubmitAddPDF" class="btn btn-success btn-add-pile">Submit</button>
             </div>
         </div>
     </div>

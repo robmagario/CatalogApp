@@ -2,6 +2,9 @@
     <!-- Trigger the login modal with a button -->
     {{#if IsWeb}}
     <button type="button" class="btn btn-info btn-lg login-btn" data-toggle="modal" data-target="#LoginModel">Login</button>
+    <!--<button style="z-index:1">-->
+        <img src="./img/esc-pile-logo-transparent.png" style="position:relative; z-index:1;">
+    <!--</button>-->
 
 
     <!--<div class="coverimg">-->
@@ -38,6 +41,10 @@
             </div>
         </div>
     </div>
+
+        <!--<div class="wrapper no-swipe swipe-control scrollable">-->
+            <!--{{>swipe Swiper=Swiper}}-->
+        <!--</div>-->
     {{/if}}
 
     <!--<div class="panel panel-default">-->
@@ -49,7 +56,25 @@
     <!--</div>-->
 
     <!-- Swiper -->
-    <div class="wrapper no-swipe swipe-control scrollable">
-        {{>swipe Swiper=Swiper}}
+    <!--<canvas id="pdfcanvas"></canvas>-->
+    <!--<button id="ToContnet" type="button" class="btn btn-info btn-lg ToContnet">Menu</button>-->
+    <!--<button id="PreviousPage" type="button" class="btn btn-info btn-lg PreviousPage">Previous</button>-->
+    <!--<button id="NextPage" type="button" class="btn btn-info btn-lg NextPage">Next</button>-->
+    {{#if IsMoblie}}
+    <div class="list-group">
+        <a href="#" class="content-item list-group-item">ESC Hot Rolled Sheet Piles</a>
+        <!--<a href="#" class="content-item list-group-item">ESC Cold Rolled Sheet Piles</a>-->
+        <!--<a href="#" class="content-item list-group-item">ESC Cold Formed Sheet Piles</a>-->
     </div>
+    <!--<div class="wrapper no-swipe swipe-control scrollable">-->
+        <!--{{>swipe Swiper=MoblieSwiper}}-->
+    <!--</div>-->
+    {{/if}}
 </template>
+
+<template name="BlankTemp">
+</template>
+
+<template name="PDFTemp">
+</template>
+
