@@ -3,34 +3,10 @@
  */
 
 Template.dashboard.created = function() {
-    //Uploader.init({
-    //    tmpDir: process.env.PWD + '/.uploads/tmp',
-    //    uploadDir: process.env.PWD + '/.uploads/',
-    //    checkCreateDirectories: true,
-    //    getDirectory: function (fileInfo, formData) {
-    //        if (formData && formData.directoryName != null) {
-    //            return formData.directoryName;
-    //        }
-    //        return "";
-    //    },
-    //    getFileName: function (fileInfo, formData) {
-    //        if (formData && formData.prefix != null) {
-    //            return formData.prefix + '_' + fileInfo.name;
-    //        }
-    //        return fileInfo.name;
-    //    },
-    //    finished: function (fileInfo, formData) {
-    //        if (formData && formData._id != null) {
-    //            Items.update({_id: formData._id}, {$push: {uploads: fileInfo}});
-    //        }
-    //    }
-    //});
-}
+};
 
 Template.dashboard.rendered = function() {
     $('.content').show();
-
-    //Uploader.render.call(this);
 
     Uploader.uploadUrl = Meteor.absoluteUrl("upload"); // Cordova needs absolute URL
 };
@@ -38,6 +14,7 @@ Template.dashboard.rendered = function() {
 Template.dashboard.events({
     // Logout
     'click .logout-btn': function() {
+        log.show("Logout");
         Meteor.logout(function() {
             location = "/";
         });
@@ -45,6 +22,7 @@ Template.dashboard.events({
 
     // Navbar Events
     'click .nav-tab': function(e) {
+        log.show("Select " + e.currentTarget.innerText + " tab");
         var _value = e.currentTarget.innerText;
         _value = _value.replace(/ /m, "");
         $('.nav-tab').parent().removeClass('active');
@@ -52,76 +30,120 @@ Template.dashboard.events({
         $('.page-item').hide();
         $('#'+_value).find('alert').html("").hide();
         $('#'+_value).show();
+
+        $('#AddPDF').find('input').val('');
+        $('#AddPDF').find('input').eq(1).val(1);
     },
 
-    // Add Pile Events
-    'click .btn-add-pile': function() {
-        var _pile_name = $('#AddPile').find('input').eq(0).val();
-        var _pile_page = $('#AddPile').find('input').eq(1).val();
-        var _pile_text = $('#AddPile').find('textarea').eq(0).val();
-
-        var _error = "";
-        if(_pile_name == null || _pile_name == "") {
-            _error = "Please fill the pile name";
-        } else if(sNan(_pile_page)) {
-            _error = "Please fill the page of this pile";
-        } else if(_pile_text == null || _pile_text == "") {
-            _error = "Please fill the information of this pile";
+    // Add Sub Directory
+    'click .add-sub-directory': function() {
+        var _HTML_Val = $('#AddPDF_SubDir').find('input');
+        console.log(_HTML_Val);
+        var _length = _HTML_Val.length / 2;
+        var _HTML = "";
+        for(var i=0; i<_length; i++) {
+            _HTML += "<div>" +
+                "<button type='button' class='btn btn-warning btn-sm remove-sub-directory' style='width:2.7%; margin-left:3.5%; margin-right: 3.5%;'> - </button>" +
+                "<div class='form-group' style='display:inline-block; width:50%;'>" +
+                "<label>Sub Directory Name:</label>" +
+                "<input type='text' class='form-control' placeholder='Sub Directory Name' value='"+_HTML_Val[i*2].value+"'>" +
+                "</div>" +
+                "<div class='form-group' style='display:inline-block; width:20%; margin-left:19.5%;'>" +
+                "<label>Page:</label>" +
+                "<input class='form-control' type='number' min='1' step='1' value='"+_HTML_Val[i*2+1].value+"'>" +
+                "</div>" +
+                "</div>";
         }
-
-        if(_error == "") {
-            var _date = new Date();
-            var _creater = Meteor.userId();
-
-            var _PileAfterThisPile = Piles.find({page:{$gt:_pile_page}}, {sort:{page:1}});
-            if(_PileAfterThisPile != null) {
-                var _PileArray = _PileAfterThisPile.fetch();
-                var i;
-                for(i in _PileArray) {
-                    if(!isNaN(i)) {
-                        Piles.update({_id:_PileArray[i]._id}, {
-                            page: (parseInt(_pile_page) + _PileArray[i].page)
-                        });
-                    }
-                }
-            }
-
-            Piles.insert({
-                name: _pile_name,
-                page: parseInt(_pile_page),
-                info: _pile_text,
-                date: _date,
-                creater: _creater
-            })
-        } else {
-            $('#LoginModel').find('.alert').html(_error).show();
-        }
+        _HTML += "<div>" +
+            "<button type='button' class='btn btn-warning btn-sm remove-sub-directory' style='width:2.7%; margin-left:3.5%; margin-right: 3.5%;'> - </button>" +
+            "<div class='form-group' style='display:inline-block; width:50%;'>" +
+            "<label>Sub Directory Name:</label>" +
+            "<input type='text' class='form-control' placeholder='Sub Directory Name'>" +
+            "</div>" +
+            "<div class='form-group' style='display:inline-block; width:20%; margin-left:19.5%;'>" +
+            "<label>Page:</label>" +
+            "<input class='form-control' type='number' min='1' step='1' value='1'>" +
+            "</div>" +
+            "</div>";
+        $('#AddPDF_SubDir').html(_HTML);
     },
 
-    'click .table-add-col': function() {
-        var _headHTML = $('#AddPile').find('thead').html();
-        console.log(_headHTML);
-        var _BodyHTML = $('#AddPile').find('tbody').html();
-        console.log(_BodyHTML);
+    // Remove Sub Directory
+    'click .remove-sub-directory': function(e) {
+        console.log(e);
+        e.currentTarget.parentElement.remove();
     },
 
+    // Click Upload
     'click .start': function (e) {
-        console.log('!!!')
+        log.show("Start Upload!");
         Uploader.startUpload.call(Template.instance(), e);
     },
 
-    'click #SubmitAddPDF': function(e) {
-        console.log('Submiting');
-        var _directory = $('#AddPDF').find('input').eq(0).val();
-        console.log(_directory);
-        var _file = $('#AddPDF').find('input').eq(1).val();
-        console.log(_file);
-        console.log(e);
-        Uploader.startUpload.call(_file, e);
+    // Click Edit
+    'click .edit-btn': function() {
+        log.show("Open Log Model.");
+        if(Meteor.user().username == this.createBy.name) {
+            $('#EditModel').find('h4').eq(0).html(this.info.name);
+            $('#EditModel').find('label').eq(0).html(this._id);
+            $('#EditModel').find('input').eq(0).val(this.directory);
+            $('#EditModel').find('input').eq(1).val(this.pageindex);
+        } else {
+            log.show(this.directory + ' is not belonged to ' + Meteor.user().username + '.');
+            window.setTimeout(function() {
+                $('#EditModel').hide();
+                $('.modal-backdrop').remove();
+                alert("You cannot edit other users things");
+            }, 200);
+        }
+    },
+    // Submit Edit
+    'click #edit': function() {
+        var _id = $('#EditModel').find('label').eq(0).html();
+        var _directory = $('#EditModel').find('input').eq(0).val();
+        if(_directory == null || _directory == "") {
+            _directory = $('#EditModel').find('h4').eq(0).html();
+        }
+        var _index = parseInt($('#EditModel').find('input').eq(1).val());
+        var _currentIndex = PDFFiles.findOne({pageindex: _index});
+        while(_currentIndex != null && _currentIndex._id != _id) {
+            var _new_index = parseInt(_currentIndex.pageindex)+1;
+            var _nextIndex = PDFFiles.findOne({pageindex: _new_index});
+            PDFFiles.update({_id: _currentIndex._id}, {$set:{pageindex:_new_index}});
+            _currentIndex = _nextIndex;
+        }
+        PDFFiles.update({_id: _id}, {$set: {
+            pageindex: _index,
+            directory: _directory
+        }}, function() {
+            log.show("Finish edit data.");
+
+            // Hide Edit Model
+            $('#EditModel').hide();
+
+            // Alert
+            alert("Directory name changed successfully");
+
+
+        });
+    },
+
+    // Delete a PDF
+    'click .delete-btn': function() {
+        log.show('Try Delete ' + this.directory);
+        if(Meteor.user().username == this.createBy.name) {
+            Meteor.call('deleteFile', this._id, function () {
+                log.show('Delete ' + this.directory + ' successfully.');
+            });
+        } else {
+            log.show(this.directory + ' is not belonged to ' + Meteor.user().username + '.');
+            alert("You cannot delete other users things");
+        }
     }
 });
 
 Template.dashboard.helpers({
+    // Check is logined or not
     IsLogin: function() {
         if(Meteor.userId() != null) {
             return true;
@@ -129,31 +151,91 @@ Template.dashboard.helpers({
             return false;
         }
     },
-    uploadCallbacks: function() {
+
+    // Get PDF Data
+    pdf_data: function() {
+        return PDFFiles.find({}, {sort: {pageindex: 1}});
+    },
+
+    // Get User Data
+    userData: function() {
+        return Meteor.users.find({}, {sort: {username: 1}});
+    },
+
+
+    // Callback after upload
+    uploadFinished: function() {
         return {
             finished: function(index, fileInfo, context) {
-                console.log("Callback");
-                Uploads.insert(fileInfo);
+                log.show("Upload Finish!")
+                var _directory = $('#AddPDF').find('input').eq(0).val();
+                if(_directory == null || _directory == "") {
+                    _directory = fileInfo.name;
+                }
+                var _sub_dirs_Array = $('#AddPDF_SubDir').find('input');
+                var _sub_dirs = [];
+                for(var i=0; i<_sub_dirs_Array.length/2; i++) {
+                    _sub_dirs.push({
+                        name: _sub_dirs_Array[i*2].value,
+                        page: parseInt(_sub_dirs_Array[i*2+1].value)
+                    })
+                }
+                var _index = parseInt($('#AddPDF').find('input').eq(1).val());
+                var _currentIndex = PDFFiles.findOne({pageindex: _index});
+                while(_currentIndex != null) {
+                    var _new_index = parseInt(_currentIndex.pageindex)+1;
+                    var _nextIndex = PDFFiles.findOne({pageindex: _new_index});
+                    PDFFiles.update({_id: _currentIndex._id}, {$set:{pageindex:_new_index}});
+                    _currentIndex = _nextIndex;
+                }
+                var _date = new Date().toUTCString();
+                var _userId = Meteor.userId();
+                var _user = Meteor.user().username;
+
+                // Inset data to database
+                PDFFiles.insert({
+                    pageindex: _index,
+                    directory: _directory,
+                    sub_dir:   _sub_dirs,
+                    createAt:  _date,
+                    createBy: {
+                        id:   _userId,
+                        name: _user
+                    },
+                    info: fileInfo
+                }, function() {
+                    log.show("Finish insert data to database.");
+
+                    // Show the Overview Page
+                    //$('#AddPDF').hide();
+                    //$('#Overview').show();
+                    //
+                    //// Active the tab of overview
+                    //$('.nav-tab').eq(0).addClass('active');
+                    //$('.nav-tab').eq(1).removeClass('active');
+
+                    // Alert
+                    alert(fileInfo.name + " is uploaded successfully");
+
+                    // Refresh
+                    location.reload();
+                });
             }
         }
-    },
-    'infoLabel': function() {
-        var instance = Template.instance();
-
-        // we may have not yet selected a file
-        var info = instance.info.get();
-        if (!info) {
-            return;
-        }
-
-        var progress = instance.globalInfo.get();
-
-        // we display different result when running or not
-        return progress.running ?
-        info.name + ' - ' + progress.progress + '% - [' + progress.bitrate + ']' :
-        info.name + ' - ' + info.size + 'B';
-    },
-    'progress': function() {
-        return Template.instance().globalInfo.get().progress + '%';
     }
 });
+
+// Show Log
+log = {
+    active: false,
+    show: function(message) {
+        if(this.active) {
+            console.log(message);
+        }
+    },
+    alert: function(message) {
+        if(this.active) {
+            alert(message);
+        }
+    }
+};

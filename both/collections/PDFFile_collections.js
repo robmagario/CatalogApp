@@ -2,7 +2,7 @@
  * Created by chinhong on 6/29/15.
  */
 
-Piles = new Mongo.Collection("piles");
+PDFFiles = new Mongo.Collection("pdf_files");
 
 if (Meteor.isClient) {
     Template.body.helpers({
@@ -12,7 +12,7 @@ if (Meteor.isClient) {
     })
 }
 
-Piles.allow({
+PDFFiles.allow({
     'insert': function(userId, doc) {
         return true;
     },

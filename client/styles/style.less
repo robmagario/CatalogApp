@@ -12,8 +12,8 @@
 @textbackground:      #ffffff;
 
 
-//body
-@body-bg: ;
+////body
+//@body-bg: ;
 
 body {
   font-family: "Interstate", AvenirNext, sans-serif;
@@ -38,10 +38,10 @@ h1, .h1 {
   float:right;
 }
 
-//links
-@link-color: ;
-@link-hover-color: ;
-@link-hover-decorationL: ;
+////links
+//@link-color: ;
+//@link-hover-color: ;
+//@link-hover-decorationL: ;
 
 //fonts
 @font-family-sans-serif: src("/public/assets/fonts/InterstateRegular.ttf");
@@ -50,29 +50,37 @@ h1, .h1 {
 @headerfont2: src("/public/assets/fonts/InterstateRegular.ttf");
 @bodyfont: src("/public/assets/fonts/Interstate-Thin_24147.ttf");
 
-//headings
-@font-size-h1: ;
-@font-size-h2: ;
+////headings
+//@font-size-h1: ;
+//@font-size-h2: ;
 @headings-font-family: Interstate;
-@headings-color: ;
+//@headings-color: ;
+//
+////progress bar
+//@progress-bg: ;
+//@progress-bar-color: ;
+//
+//@progress-border-radius: ;
+//
+//@progress-bar-bg: ;
+//
+//@progress-bar-success-bg: ;
+//
+//@progress-bar-warning-bg: ;
+//@progress-bar-danger-bg: ;
+//@progress-bar-info-bg: ;
 
-//progress bar
-@progress-bg: ;
-@progress-bar-color: ;
-
-@progress-border-radius: ;
-
-@progress-bar-bg: ;
-
-@progress-bar-success-bg: ;
-
-@progress-bar-warning-bg: ;
-@progress-bar-danger-bg: ;
-@progress-bar-info-bg: ;
-
-.logout-btn,
-.login-btn {
+.logout-btn {
   right: 0;
+  z-index: 1;
+  position: absolute;
+  margin-top: 2.5px;
+  margin-right: 2px;
+}
+.login-btn {
+  top: 200px;
+  right: 50px;
+  width: 98px;
   z-index: 1;
   position: absolute;
 }
@@ -123,4 +131,71 @@ th, td {
   right:0;
   bottom:0;
   position: fixed;
+}
+
+.uploadPanel {
+  .btn-file {
+    z-index: 1;
+    width: 10%;
+  }
+  .form-control {
+    width: 90%;
+    display: inline-block;
+  }
+}
+
+#Overview {
+  table {
+    tbody {
+      tr {
+        td {
+          vertical-align: middle;
+          font-size: 12px;
+        }
+      }
+    }
+  }
+}
+
+.sidebar {
+  left: -40%;
+  width: 40%;
+  position: fixed;
+  .sidebar-home,
+  .sidebar-item,
+  .sidebar-item-sub{
+    margin: 0;
+    font-size: 16px;
+    background-color: #FFFFFF;
+    border-left: solid 2px grey;
+    border-right: solid 2px grey;
+    border-bottom: solid 2px grey;
+  }
+}
+
+body {
+  overflow: auto;
+}
+
+#showframe,
+.sidebar {
+  height: 89%;
+}
+
+/* Chrome, Safari, Opera */
+@-webkit-keyframes SidebarOpen {
+  from {left: -40%;}
+  to {left: 0%;}
+}
+@keyframes SidebarOpen {
+  from {left: -40%;}
+  to {left: 0%;}
+}
+@-webkit-keyframes SidebarClose {
+  from {left: 0%;}
+  to {left: -40%;}
+}
+@keyframes SidebarClose {
+  from {left: 0%;}
+  to {left: -40%;}
 }

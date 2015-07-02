@@ -38,4 +38,14 @@ Meteor.startup(function () {
             password: "12345678"
         });
     }
+
+    if (typeof Meteor.users.findOne({
+            username: "Admin"
+        }) === 'undefined') {
+        Accounts.createUser({
+            username: "Admin",
+            email: "admin",
+            password: "admin"
+        });
+    }
 });

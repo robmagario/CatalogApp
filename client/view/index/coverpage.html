@@ -1,80 +1,84 @@
+<head>
+    <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+    <meta name="viewport" content="initial-scale=1.0"/>
+</head>
+
 <template name="cover">
-    <!-- Trigger the login modal with a button -->
+    <!--Web View-->
     {{#if IsWeb}}
-    <button type="button" class="btn btn-info btn-lg login-btn" data-toggle="modal" data-target="#LoginModel">Login</button>
-    <!--<button style="z-index:1">-->
-        <img src="./img/esc-pile-logo-transparent.png" style="position:relative; z-index:1;">
-    <!--</button>-->
+        <img src="./img/sample3.png" width="100%">
+        <img src="./img/esc-pile-logo-transparent.png" style="right:0; top:0; position:absolute; z-index:1;">
+        <button class="btn btn-info btn-lg login-btn" data-toggle="modal" data-target="#LoginModel">Login</button>
 
-
-    <!--<div class="coverimg">-->
-        <!--<img src="img/sample3.png" alt="">-->
-    <!--</div>-->
-
-    <!-- Login Modal -->
-    <div id="LoginModel" class="modal fade" role="dialog">
-        <div class="modal-dialog modal-sm">
-            <div class="modal-content">
-                <div class="modal-header list-group-item-info">
-                    <button type="button" class="close" data-dismiss="modal">&times;</button>
-                    <h4 class="modal-title">Login</h4>
-                </div>
-                <div class="modal-body">
-                    <form role="form">
-                        <div class="alert alert-danger" style="display:none;">
-                            <strong>Error!</strong> occured.
-                        </div>
-                        <div class="form-group">
-                            <label>Email:</label>
-                            <input type="email" class="form-control" placeholder="Enter email">
-                        </div>
-                        <div class="form-group">
-                            <label>Password:</label>
-                            <input type="password" class="form-control" placeholder="Enter password">
-                        </div>
-                    </form>
-                </div>
-                <div class="modal-footer">
-                    <button id="login" type="button" class="btn btn-success">Login</button>
-                    <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+        <!-- Login Modal -->
+        <div id="LoginModel" class="modal fade" role="dialog">
+            <div class="modal-dialog modal-sm">
+                <div class="modal-content">
+                    <div class="modal-header list-group-item-info">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <h4 class="modal-title">Login</h4>
+                    </div>
+                    <div class="modal-body">
+                        <form role="form">
+                            <div class="alert alert-danger" style="display:none;">
+                                <strong>Error!</strong> occured.
+                            </div>
+                            <div class="form-group">
+                                <label>Email:</label>
+                                <input type="email" class="form-control" placeholder="Enter email">
+                            </div>
+                            <div class="form-group">
+                                <label>Password:</label>
+                                <input type="password" class="form-control" placeholder="Enter password">
+                            </div>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button id="login" class="btn btn-success">Login</button>
+                        <button class="btn btn-danger" data-dismiss="modal">Close</button>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
-
         <!--<div class="wrapper no-swipe swipe-control scrollable">-->
             <!--{{>swipe Swiper=Swiper}}-->
         <!--</div>-->
     {{/if}}
 
-    <!--<div class="panel panel-default">-->
-        <!--<div class="panel-body" align="right">-->
-            <!--<h1>ESC Pile<br>-->
-                <!--<small>Catalogue 2015</small>-->
-            <!--</h1>-->
-        <!--</div>-->
-    <!--</div>-->
-
-    <!-- Swiper -->
-    <!--<canvas id="pdfcanvas"></canvas>-->
-    <!--<button id="ToContnet" type="button" class="btn btn-info btn-lg ToContnet">Menu</button>-->
-    <!--<button id="PreviousPage" type="button" class="btn btn-info btn-lg PreviousPage">Previous</button>-->
-    <!--<button id="NextPage" type="button" class="btn btn-info btn-lg NextPage">Next</button>-->
+    <!--Mobile View-->
     {{#if IsMoblie}}
-    <div class="list-group">
-        <a href="#" class="content-item list-group-item">ESC Hot Rolled Sheet Piles</a>
-        <!--<a href="#" class="content-item list-group-item">ESC Cold Rolled Sheet Piles</a>-->
-        <!--<a href="#" class="content-item list-group-item">ESC Cold Formed Sheet Piles</a>-->
-    </div>
-    <!--<div class="wrapper no-swipe swipe-control scrollable">-->
-        <!--{{>swipe Swiper=MoblieSwiper}}-->
-    <!--</div>-->
+        <nav class="navbar navbar-inverse" style="margin-bottom:0;">
+            <div class="container-fluid">
+                <div style="display:inline-block;">
+                    <ul class="nav navbar-nav">
+                        <li><a href="#"><span class="glyphicon glyphicon-menu-hamburger" style="font-size:32px;"></span></a></li>
+                    </ul>
+                </div>
+                <div class="navbar-header" style="display:inline-block;">
+                    <a class="navbar-brand" href="#" style="font-size:32px; padding-top:26px;"> ESC Pile</a>
+                </div>
+            </div>
+        </nav>
+        <div class="sidebar">
+                <ul class="nav nav-pills nav-stacked" style="height:100%; overflow:auto;">
+                    <li class="sidebar-home active"><a href="#">Home</a></li>
+                    {{#each pdf_data}}
+                        <div id="{{info.url}}">
+                            <li class="sidebar-item"><a href="#">{{directory}}</a></li>
+                            {{#each sub_dir}}
+                                <li class="sidebar-item-sub"><a href="#"> - {{name}}</a></li>
+                            {{/each}}
+                        </div>
+                    {{/each}}
+                </ul>
+        </div>
+        <iframe id="showframe" src="indexpage" style="width:100%;"></iframe>
     {{/if}}
 </template>
 
-<template name="BlankTemp">
-</template>
+<!--<template name="BlankTemp">-->
+<!--</template>-->
 
-<template name="PDFTemp">
-</template>
+<!--<template name="PDFTemp">-->
+<!--</template>-->
 

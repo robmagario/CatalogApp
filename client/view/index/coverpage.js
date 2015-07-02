@@ -3,15 +3,7 @@
  */
 
 var MyBrowser;
-
-Swiper = new Swipe(['page002', 'page003', 'page004', 'page005']);
-MoblieSwiper = new Swipe(['BlankTemp', 'PDFTemp']);
-
-var pdfinfo = {
-    PageMin: 1,
-    PageMax: 2,
-    PageCurrent: 1
-}
+var SidebarOpen = false;
 
 Template.cover.rendered = function() {
     if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
@@ -20,92 +12,20 @@ Template.cover.rendered = function() {
         MyBrowser = "Web";
     }
 
-    $('.wrapper').css({width: innerWidth, height: innerHeight});
-
-    // initial page
-    //Swiper.setInitialPage('page002');
-
-    // page control
-    //Tracker.autorun(function() {
-    //    if (Swiper.pageIs('page002')) {
-    //        Swiper.leftRight(null, 'page003');
-    //    }
-    //});
-    //Tracker.autorun(function() {
-    //    if (Swiper.pageIs('page003')) {
-    //        Swiper.leftRight('page002', 'page004');
-    //    }
-    //});
-    //Tracker.autorun(function() {
-    //    if (Swiper.pageIs('page004')) {
-    //        Swiper.leftRight('page003', 'page005');
-    //    }
-    //});
-    //Tracker.autorun(function() {
-    //    if (Swiper.pageIs('page005')) {
-    //        Swiper.leftRight('page004', null);
-    //    }
-    //});
-
     // Set worker URL to package assets
     if (MyBrowser == "Mobile") {
-        $('#pdfcanvas').css({width: innerWidth, height: innerHeight});
-        PDFJS.workerSrc = '/packages/pascoual_pdfjs/build/pdf.worker.js';
-        // Create PDF
-        PDFJS.getDocument("/upload/tmp/Testing.pdf").then(function getPdfHelloWorld(pdf) {
-            // Fetch the first page
-            console.log(pdf);
-            pdf.getPage(1).then(function getPageHelloWorld(page) {
-                var scale = 1;
-                var viewport = page.getViewport(scale);
-
-                // Prepare canvas using PDF page dimensions
-                var canvas = document.getElementById('pdfcanvas');
-                var context = canvas.getContext('2d');
-                canvas.height = viewport.height;
-                canvas.width = viewport.width;
-
-                // Render PDF page into canvas context
-                page.render({canvasContext: context, viewport: viewport}).promise.then(function () {
-                });
-            });
-        });
-
-        //location = "/upload/tmp/Testing.pdf";
     }
 };
 
-function ReadPDF(p) {
-    console.log(p)
-    PDFJS.workerSrc = '/packages/pascoual_pdfjs/build/pdf.worker.js';
-    // Create PDF
-    PDFJS.getDocument("/upload/tmp/Testing.pdf").then(function getPdfHelloWorld(pdf) {
-        // Fetch the first page
-        console.log(pdf);
-        pdf.getPage(p).then(function getPageHelloWorld(page) {
-            var scale = 1;
-            var viewport = page.getViewport(scale);
-
-            // Prepare canvas using PDF page dimensions
-            var canvas = document.getElementById('pdfcanvas');
-            var context = canvas.getContext('2d');
-            canvas.height = viewport.height;
-            canvas.width = viewport.width;
-
-            // Render PDF page into canvas context
-            page.render({canvasContext: context, viewport: viewport}).promise.then(function () {
-            });
-        });
-    });
-}
-
 Template.cover.events({
-    // Click Logon
+    // Click Login
     'click .login-btn': function() {
+        log.show("Open Login Model.");
         $('#LoginModel').find('.alert').hide();
     },
     // Submit Login
     'click #login': function() {
+        log.show("Check Login Column.")
         var _email = $('#LoginModel').find('input').eq(0).val();
         var _password = $('#LoginModel').find('input').eq(1).val();
 
@@ -117,63 +37,70 @@ Template.cover.events({
         }
 
         if(_error == "") {
+            log.show("Try Login")
             Meteor.loginWithPassword(_email, _password, function(err, res) {
                 if(err) {
                     // Show Error
+                    log.show("Login fail. " + err.reason);
                     $('#LoginModel').find('.alert').html(err.reason).show();
                 } else {
                     // Go to Dashboard
+                    log.show("Login successfully.");
                     location = "/dashboard";
                 }
             })
         } else {
             // Show Error
+            log.show("Including blank column while login.");
             $('#LoginModel').find('.alert').html(_error).show();
         }
     },
 
-    'click #PreviousPage': function() {
-        if(pdfinfo.PageCurrent > pdfinfo.PageMin) {
-            pdfinfo.PageCurrent--;
-            ReadPDF(pdfinfo.PageCurrent);
+    // Sidebar Events
+    'click .glyphicon-menu-hamburger': function() {
+        if(SidebarOpen) {
+            log.show("Close Sidebar");
+            $('.sidebar').css({left:'-40%', animation: 'SidebarClose 0.5s', '-webkit-animation': 'SidebarClose 0.5s'});
+            SidebarOpen = false;
+        } else {
+            log.show("Open Sidebar");
+            $('.sidebar').css({left:'0%', animation: 'SidebarOpen 0.5s', '-webkit-animation': 'SidebarOpen 0.5s'});
+            SidebarOpen = true;
         }
     },
-
-    'click #NextPage': function() {
-        if(pdfinfo.PageCurrent < pdfinfo.PageMax) {
-            pdfinfo.PageCurrent++;
-            ReadPDF(pdfinfo.PageCurrent);
-        }
+    'click .sidebar-home': function() {
+        log.show("Select Home");
+        $('#showframe').attr('src', 'indexpage');
+        $('.sidebar').css({left:'-40%', animation: 'SidebarClose 0.5s', '-webkit-animation': 'SidebarClose 0.5s'});
+        SidebarOpen = false;
+        $('.sidebar-item').removeClass('active');
+        $('.sidebar-item-sub').removeClass('active');
+        $('.sidebar-home').addClass('active');
     },
-
-    'click .content-item': function() {
-        location = "/upload/tmp/Testing.pdf";
+    'click .sidebar-item': function(e) {
+        log.show("Select " + this.directory);
+        $('#showframe').attr('src', this.info.url);
+        $('.sidebar').css({left:'-40%', animation: 'SidebarClose 0.5s', '-webkit-animation': 'SidebarClose 0.5s'});
+        SidebarOpen = false;
+        $('.sidebar-home').removeClass('active');
+        $('.sidebar-item').removeClass('active');
+        $('.sidebar-item-sub').removeClass('active');
+        e.currentTarget.classList.add('active');
     },
-
-    //'click .content-item': function() {
-    //    console.log("!!!");
-    //    if(MyBrowser == "Mobile") {
-    //        Swiper.moveRight();
-    //        $('.list-group').hide();
-    //    }
-    //    return null;
-    //},
-
-    // Controls for the wrapper
-    'click .wrapper': function(e,t) {
-        if (MyBrowser == "Web") {
-            if (e.screenX < innerWidth / 2) {
-                Swiper.moveLeft();
-            } else {
-                Swiper.moveRight();
-            }
-        }
+    'click .sidebar-item-sub': function(e) {
+        log.show("Select " + this.name);
+        $('#showframe').attr('src', e.currentTarget.parentElement.id + '#page=' + this.page);
+        $('.sidebar').css({left:'-40%', animation: 'SidebarClose 0.5s', '-webkit-animation': 'SidebarClose 0.5s'});
+        SidebarOpen = false;
+        $('.sidebar-home').removeClass('active');
+        $('.sidebar-item').removeClass('active');
+        $('.sidebar-item-sub').removeClass('active');
+        e.currentTarget.classList.add('active');
     }
 });
 
 Template.cover.helpers({
-    Swiper: Swiper,
-    MoblieSwiper: MoblieSwiper,
+    // Check is Web or Mobile
     IsWeb: function() {
         if( /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ) {
             return false;
@@ -187,34 +114,16 @@ Template.cover.helpers({
         } else {
             return false;
         }
+    },
+
+    pdf_data: function() {
+        return PDFFiles.find({}, {sort: {pageindex: 1}});
     }
 });
 
-Template.PDFTemp.rendered = function() {
-    // Set worker URL to package assets
-    PDFJS.workerSrc = '/packages/pascoual_pdfjs/build/pdf.worker.js';
-    // Create PDF
-    PDFJS.getDocument("/upload/tmp/Testing.pdf").then(function getPdfHelloWorld(pdf) {
-        // Fetch the first page
-        pdf.getPage(1).then(function getPageHelloWorld(page) {
-            var scale = 1;
-            var viewport = page.getViewport(scale);
-
-            // Prepare canvas using PDF page dimensions
-            var canvas = document.getElementById('pdfcanvas');
-            var context = canvas.getContext('2d');
-            canvas.height = viewport.height;
-            canvas.width = viewport.width;
-
-            // Render PDF page into canvas context
-            page.render({canvasContext: context, viewport: viewport}).promise.then(function () {
-            });
-        });
-    });
-};
-
+// Show log
 log = {
-    active: true,
+    active: false,
     show: function(message) {
         if(this.active) {
             console.log(message);
