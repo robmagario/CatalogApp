@@ -25,7 +25,7 @@ Template.cover.events({
     },
     // Submit Login
     'click #login': function() {
-        log.show("Check Login Column.")
+        log.show("Check Login Column.");
         var _email = $('#LoginModel').find('input').eq(0).val();
         var _password = $('#LoginModel').find('input').eq(1).val();
 
@@ -70,32 +70,55 @@ Template.cover.events({
     },
     'click .sidebar-home': function() {
         log.show("Select Home");
-        $('#showframe').attr('src', 'indexpage');
+        //$('#showframe').attr('src', 'indexpage');
+        $('#showframe').show();
         $('.sidebar').css({left:'-40%', animation: 'SidebarClose 0.5s', '-webkit-animation': 'SidebarClose 0.5s'});
         SidebarOpen = false;
         $('.sidebar-item').removeClass('active');
         $('.sidebar-item-sub').removeClass('active');
+        $('.sidebar-test').removeClass('active');
         $('.sidebar-home').addClass('active');
     },
     'click .sidebar-item': function(e) {
         log.show("Select " + this.directory);
-        $('#showframe').attr('src', this.info.url);
+        $('#showframe').hide();
+        $('#show_pdf_obj').attr('data', this.info.url);
+        $('#show_pdf_emb').attr('src', this.info.url);
         $('.sidebar').css({left:'-40%', animation: 'SidebarClose 0.5s', '-webkit-animation': 'SidebarClose 0.5s'});
         SidebarOpen = false;
         $('.sidebar-home').removeClass('active');
         $('.sidebar-item').removeClass('active');
         $('.sidebar-item-sub').removeClass('active');
+        $('.sidebar-test').removeClass('active');
         e.currentTarget.classList.add('active');
+        DrawPDF(this.info.url, 1);
     },
     'click .sidebar-item-sub': function(e) {
         log.show("Select " + this.name);
-        $('#showframe').attr('src', e.currentTarget.parentElement.id + '#page=' + this.page);
+        $('#showframe').hide();
+        $('#show_pdf_obj').attr('data', e.currentTarget.parentElement.id + '#page=' + this.page);
+        $('#show_pdf_emb').attr('src', e.currentTarget.parentElement.id + '#page=' + this.page);
+        $('.sidebar').css({left:'-40%', animation: 'SidebarClose 0.5s', '-webkit-animation': 'SidebarClose 0.5s'});
+        SidebarOpen = false;
+        $('.sidebar-home').removeClass('active');
+        $('.sidebar-item').removeClass('active');
+        $('.sidebar-item-sub').removeClass('active');
+        $('.sidebar-test').removeClass('active');
+        e.currentTarget.classList.add('active');
+        DrawPDF(e.currentTarget.parentElement.id, this.page);
+    },
+    'click .sidebar-test': function(e) {
+        log.show("Select " + this.name);
+        $('#showframe').hide();
+        $('#show_pdf_obj').attr('data', "/Test2.pdf");
+        $('#show_pdf_emb').attr('src', "/Test2.pdf");
         $('.sidebar').css({left:'-40%', animation: 'SidebarClose 0.5s', '-webkit-animation': 'SidebarClose 0.5s'});
         SidebarOpen = false;
         $('.sidebar-home').removeClass('active');
         $('.sidebar-item').removeClass('active');
         $('.sidebar-item-sub').removeClass('active');
         e.currentTarget.classList.add('active');
+        DrawPDF("/Test2.pdf", 1);
     }
 });
 
@@ -120,6 +143,34 @@ Template.cover.helpers({
         return PDFFiles.find({}, {sort: {pageindex: 1}});
     }
 });
+
+function DrawPDF(url, page) {
+    var _page = page;
+    if(isNaN(_page)) {
+        _page = 1;
+    }
+    // Set worker URL to package assets
+    PDFJS.workerSrc = '/packages/pascoual_pdfjs/build/pdf.worker.js';
+    // Create PDF
+    PDFJS.getDocument(url).then(function getPdfHelloWorld(pdf) {
+        // Fetch the first page
+        pdf.getPage(_page).then(function getPageHelloWorld(page) {
+            var scale = 1;
+            var viewport = page.getViewport(scale);
+
+            // Prepare canvas using PDF page dimensions
+            var canvas = document.getElementById('pdfcanvas');
+            var context = canvas.getContext('2d');
+            canvas.height = viewport.height;
+            canvas.width = viewport.width;
+
+            // Render PDF page into canvas context
+            page.render({canvasContext: context, viewport: viewport}).promise.then(function () {
+
+            });
+        });
+    });
+}
 
 // Show log
 log = {

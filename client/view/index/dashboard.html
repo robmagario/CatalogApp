@@ -78,7 +78,7 @@
             </div>
         </div>
 
-        <!-- Login Modal -->
+        <!-- Edit Modal -->
         <div id="EditModel" class="modal fade" role="dialog">
             <div class="modal-dialog">
                 <div class="modal-content">
@@ -99,6 +99,12 @@
                                 <label>Index:</label>
                                 <input class="form-control" type="number" min="1" step="1" value="1">
                             </div>
+                            <br>
+                            <div id="Edit_SubDir">
+                                {{#each sub_dir}}
+                                {{/each}}
+                            </div>
+                            <button type="button" class="btn btn-primary btn-sm edit-add-sub-directory">Add Sub Directory</button>
                         </form>
                     </div>
                     <div class="modal-footer">
