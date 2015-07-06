@@ -1,5 +1,5 @@
 <head>
-    <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+    <!--<link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">-->
     <meta name="viewport" content="initial-scale=1.0"/>
 </head>
 
@@ -59,10 +59,10 @@
                 </div>
             </div>
         </nav>
-        <div class="sidebar">
+        <div class="sidebar" style="z-index:2;">
                 <ul class="nav nav-pills nav-stacked" style="height:100%; overflow:auto;">
                     <li class="sidebar-home active"><a href="#">Home</a></li>
-                    <li class="sidebar-test"><a href="#">Testing123456</a></li>
+                    <!--<li class="sidebar-test"><a href="#">Testing123456</a></li>-->
                     {{#each pdf_data}}
                         <div id="{{info.url}}">
                             <li class="sidebar-item">{{directory}}</li>
@@ -75,12 +75,27 @@
         </div>
 
         <!-- In your template -->
-        <canvas id="pdfcanvas" style="width:100%; height:88.5%;"></canvas>
+        <!--<div id="Testing" style="width:100%; height:100%; position:absolute; z-index:0;">-->
+            <!--<img src="./img/esc-pile-logo-transparent.png" style="width: 100%; padding-top:20%;">-->
+            <!--<div style="width:100%; font-size:48px; color:#6666AA; text-align:center; margin-top:5%;">-->
+                <!--Catalog App-->
+            <!--</div>-->
+        <!--</div>-->
+        <!--<canvas id="pdfcanvas" style="width:100%; height:87.5%; z-index:1;"></canvas>-->
+        <!--<div id="pdf_buttons" style="position:fixed; bottom:0; width:100%; display:none;">-->
+            <!--<span id="pdf-left" class="glyphicon glyphicon-circle-arrow-left" style="font-size:32px; left:0; padding-left:30%; position:absolute;"></span>-->
+            <!--<label id="pdf-page" style="width:100%; height:100%; font-size:24px; text-align:center; vertical-align:middle;">1</label>-->
+            <!--<span id="pdf-right" class="glyphicon glyphicon-circle-arrow-right" style="font-size:32px; right:0; padding-right:30%; position:absolute;"></span>-->
+        <!--</div>-->
+        <!--<button class="btn btn-info btn-lg" data-toggle="modal" data-target="#LoginModel"></button>-->
+        <!--<button class="btn btn-info btn-lg" data-toggle="modal" data-target="#LoginModel"><span class="glyphicon glyphicon-right-arrow" style="font-size:32px;"></span></button>-->
 
         <!--<iframe id="showframe" src="indexpage" style="width:100%;"></iframe>-->
-        <!--<object id="show_pdf_obj" data="" type="application/pdf" style="width:100%; height:88.5%;">-->
-            <!--<embed id="show_pdf_emb" src="" type="application/pdf" />-->
-        <!--</object>-->
+        <object id="show_pdf_obj" data="" type="application/pdf" style="width:100%; height:88.5%;">
+            <embed id="show_pdf_emb" src="" type="application/pdf" />
+        </object>
+
+
     {{/if}}
 </template>
 

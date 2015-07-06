@@ -5,6 +5,9 @@
 var MyBrowser;
 var SidebarOpen = false;
 
+var pdf_url = "";
+var pdf_page = 0;
+
 Template.cover.rendered = function() {
     if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
         MyBrowser = "Mobile";
@@ -15,6 +18,8 @@ Template.cover.rendered = function() {
     // Set worker URL to package assets
     if (MyBrowser == "Mobile") {
     }
+
+    //$('#Testing').html(location.href);
 };
 
 Template.cover.events({
@@ -78,6 +83,9 @@ Template.cover.events({
         $('.sidebar-item-sub').removeClass('active');
         $('.sidebar-test').removeClass('active');
         $('.sidebar-home').addClass('active');
+
+        $('#pdfcanvas').hide();
+        $('#Testing').show();
     },
     'click .sidebar-item': function(e) {
         log.show("Select " + this.directory);
@@ -91,7 +99,15 @@ Template.cover.events({
         $('.sidebar-item-sub').removeClass('active');
         $('.sidebar-test').removeClass('active');
         e.currentTarget.classList.add('active');
-        DrawPDF(this.info.url, 1);
+
+        //location = "upload/Test2.pdf";
+
+        var _url = this.info.url;
+        if(MyBrowser == "Mobile") {
+            _url = _url.replace(/localhost:\d+/,"meteor.local");
+            console.log(_url);
+        }
+        DrawPDF(_url, 1);
     },
     'click .sidebar-item-sub': function(e) {
         log.show("Select " + this.name);
@@ -105,7 +121,16 @@ Template.cover.events({
         $('.sidebar-item-sub').removeClass('active');
         $('.sidebar-test').removeClass('active');
         e.currentTarget.classList.add('active');
-        DrawPDF(e.currentTarget.parentElement.id, this.page);
+
+        //location = ".upload/Catalogue%2002.07.2015.pdf";
+
+        var _url = e.currentTarget.parentElement.id;
+        if(MyBrowser == "Mobile") {
+            //_url = _url.replace(/http:/,"android:http:");
+            //_url = _url.replace(/localhost:\d+/,"meteor.local");
+            console.log(_url);
+        }
+        DrawPDF(_url, this.page);
     },
     'click .sidebar-test': function(e) {
         log.show("Select " + this.name);
@@ -119,6 +144,14 @@ Template.cover.events({
         $('.sidebar-item-sub').removeClass('active');
         e.currentTarget.classList.add('active');
         DrawPDF("/Test2.pdf", 1);
+    },
+
+    // Controls of the pdf
+    'click #pdf-left': function() {
+        DrawPDF(pdf_url, pdf_page-1);
+    },
+    'click #pdf-right': function() {
+        DrawPDF(pdf_url, pdf_page+1);
     }
 });
 
@@ -145,6 +178,7 @@ Template.cover.helpers({
 });
 
 function DrawPDF(url, page) {
+    $('#Testing').hide();
     var _page = page;
     if(isNaN(_page)) {
         _page = 1;
@@ -168,6 +202,23 @@ function DrawPDF(url, page) {
             page.render({canvasContext: context, viewport: viewport}).promise.then(function () {
 
             });
+
+            pdf_url = url;
+            pdf_page = _page;
+
+            $('#pdfcanvas').show();
+            $('#pdf_buttons').show();
+            $('#pdf-page').html(_page);
+            if(_page == 1) {
+                $('#pdf-left').hide();
+            } else {
+                $('#pdf-left').show();
+            }
+            if(_page < pdf.numPages) {
+                $('#pdf-right').show();
+            } else {
+                $('#pdf-right').hide();
+            }
         });
     });
 }

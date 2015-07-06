@@ -6,6 +6,10 @@ Template.dashboard.created = function() {
 };
 
 Template.dashboard.rendered = function() {
+    $(document).ready(function() {
+        $('#summernote').summernote();
+    });
+
     $('.content').show();
 
     Uploader.uploadUrl = Meteor.absoluteUrl("upload"); // Cordova needs absolute URL
@@ -35,10 +39,18 @@ Template.dashboard.events({
         $('#AddPDF').find('input').eq(1).val(1);
     },
 
+    // Open Dropdown Menu
+
+
+
+
+
+
+
+
     // Add Sub Directory
     'click .add-sub-directory': function() {
         var _HTML_Val = $('#AddPDF_SubDir').find('input');
-        console.log(_HTML_Val);
         var _length = _HTML_Val.length / 2;
         var _HTML = "";
         for(var i=0; i<_length; i++) {
@@ -70,7 +82,6 @@ Template.dashboard.events({
 
     // Remove Sub Directory
     'click .remove-sub-directory': function(e) {
-        console.log(e);
         e.currentTarget.parentElement.remove();
     },
 
@@ -88,6 +99,22 @@ Template.dashboard.events({
             $('#EditModel').find('label').eq(0).html(this._id);
             $('#EditModel').find('input').eq(0).val(this.directory);
             $('#EditModel').find('input').eq(1).val(this.pageindex);
+
+            var _subDirHTML = "";
+            for(var i=0; i<this.sub_dir.length; i++) {
+                _subDirHTML += "<div>" +
+                    "<button type='button' class='btn btn-warning btn-sm remove-sub-directory' style='width:2.7%; margin-left:3.5%; margin-right: 3.5%;'> - </button>" +
+                    "<div class='form-group' style='display:inline-block; width:50%;'>" +
+                    "<label>Sub Directory Name:</label>" +
+                    "<input type='text' class='form-control' placeholder='Sub Directory Name' value='"+this.sub_dir[i].name+"'>" +
+                    "</div>" +
+                    "<div class='form-group' style='display:inline-block; width:20%; margin-left:10%;'>" +
+                    "<label>Page:</label>" +
+                    "<input class='form-control' type='number' min='1' step='1' value='"+this.sub_dir[i].page+"'>" +
+                    "</div>" +
+                    "</div>";
+            }
+            $('#Edit_SubDir').html(_subDirHTML);
         } else {
             log.show(this.directory + ' is not belonged to ' + Meteor.user().username + '.');
             window.setTimeout(function() {
@@ -97,12 +124,51 @@ Template.dashboard.events({
             }, 200);
         }
     },
+    // Add Sub Directory in Edit Model
+    'click .edit-add-sub-directory': function() {
+        var _HTML_Val = $('#Edit_SubDir').find('input');
+        var _length = _HTML_Val.length / 2;
+        var _HTML = "";
+        for(var i=0; i<_length; i++) {
+            _HTML += "<div>" +
+                "<button type='button' class='btn btn-warning btn-sm remove-sub-directory' style='width:2.7%; margin-left:3.5%; margin-right: 3.5%;'> - </button>" +
+                "<div class='form-group' style='display:inline-block; width:50%;'>" +
+                "<label>Sub Directory Name:</label>" +
+                "<input type='text' class='form-control' placeholder='Sub Directory Name' value='"+_HTML_Val[i*2].value+"'>" +
+                "</div>" +
+                "<div class='form-group' style='display:inline-block; width:20%; margin-left:10%;'>" +
+                "<label>Page:</label>" +
+                "<input class='form-control' type='number' min='1' step='1' value='"+_HTML_Val[i*2+1].value+"'>" +
+                "</div>" +
+                "</div>";
+        }
+        _HTML += "<div>" +
+            "<button type='button' class='btn btn-warning btn-sm remove-sub-directory' style='width:2.7%; margin-left:3.5%; margin-right: 3.5%;'> - </button>" +
+            "<div class='form-group' style='display:inline-block; width:50%;'>" +
+            "<label>Sub Directory Name:</label>" +
+            "<input type='text' class='form-control' placeholder='Sub Directory Name'>" +
+            "</div>" +
+            "<div class='form-group' style='display:inline-block; width:20%; margin-left:10%;'>" +
+            "<label>Page:</label>" +
+            "<input class='form-control' type='number' min='1' step='1' value='1'>" +
+            "</div>" +
+            "</div>";
+        $('#Edit_SubDir').html(_HTML);
+    },
     // Submit Edit
     'click #edit': function() {
         var _id = $('#EditModel').find('label').eq(0).html();
         var _directory = $('#EditModel').find('input').eq(0).val();
         if(_directory == null || _directory == "") {
             _directory = $('#EditModel').find('h4').eq(0).html();
+        }
+        var _sub_dirs_Array = $('#Edit_SubDir').find('input');
+        var _sub_dirs = [];
+        for(var i=0; i<_sub_dirs_Array.length/2; i++) {
+            _sub_dirs.push({
+                name: _sub_dirs_Array[i*2].value,
+                page: parseInt(_sub_dirs_Array[i*2+1].value)
+            })
         }
         var _index = parseInt($('#EditModel').find('input').eq(1).val());
         var _currentIndex = PDFFiles.findOne({pageindex: _index});
@@ -114,7 +180,8 @@ Template.dashboard.events({
         }
         PDFFiles.update({_id: _id}, {$set: {
             pageindex: _index,
-            directory: _directory
+            directory: _directory,
+            sub_dir: _sub_dirs
         }}, function() {
             log.show("Finish edit data.");
 
@@ -124,7 +191,8 @@ Template.dashboard.events({
             // Alert
             alert("Directory name changed successfully");
 
-
+            // Remove the Darker Cover
+            $('.modal-backdrop').remove();
         });
     },
 
@@ -157,8 +225,8 @@ Template.dashboard.helpers({
         return PDFFiles.find({}, {sort: {pageindex: 1}});
     },
 
-    //// Get Sub Directory
-    //subDirectory: function() {
+    // Get Sub Directory
+    //sub_dir: function() {
     //
     //},
 
@@ -229,6 +297,8 @@ Template.dashboard.helpers({
         }
     }
 });
+
+
 
 // Show Log
 log = {
