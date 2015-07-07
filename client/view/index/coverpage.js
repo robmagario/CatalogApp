@@ -20,6 +20,71 @@ Template.cover.rendered = function() {
     }
 
     //$('#Testing').html(location.href);
+
+    //// Swiper
+    //MySwiper.Initialize();
+    //// initial page
+    //MySwiper.Swiper.setInitialPage('CoverPage');
+    //// page control
+    //Tracker.autorun(function() { if (MySwiper.Swiper.pageIs('CoverPage')) {
+    //    MySwiper.Swiper.leftRight(null, 'ContentPage');
+    //}});
+    //Tracker.autorun(function() { if (MySwiper.Swiper.pageIs('ContentPage')) {
+    //    MySwiper.Swiper.leftRight('CoverPage', null);
+    //}});
+
+    // Plugin
+    // Owl Carousel Settings
+    $(".about-carousel").owlCarousel({
+        items: 3,
+        navigation: true,
+        pagination: false,
+        navigationText: [
+            "<i class='fa fa-angle-left'></i>",
+            "<i class='fa fa-angle-right'></i>"
+        ]
+    });
+
+    $(".portfolio-carousel").owlCarousel({
+        singleItem: true,
+        navigation: true,
+        pagination: false,
+        navigationText: [
+            "<i class='fa fa-angle-left'></i>",
+            "<i class='fa fa-angle-right'></i>"
+        ],
+        autoHeight: true,
+        mouseDrag: false,
+        touchDrag: false,
+        transitionStyle: "fadeUp"
+    });
+
+    $(".testimonials-carousel").owlCarousel({
+        singleItem: true,
+        navigation: true,
+        pagination: true,
+        autoHeight: true,
+        navigationText: [
+            "<i class='fa fa-angle-left'></i>",
+            "<i class='fa fa-angle-right'></i>"
+        ],
+        transitionStyle: "backSlide"
+    });
+
+    $(".portfolio-gallery").owlCarousel({
+        items: 3,
+    });
+
+    // Magnific Popup jQuery Lightbox Gallery Settings
+    $('.gallery-link').magnificPopup({
+        type: 'image',
+        gallery: {
+            enabled: true
+        },
+        image: {
+            titleSrc: 'title'
+        }
+    });
 };
 
 Template.cover.events({
@@ -172,10 +237,39 @@ Template.cover.helpers({
         }
     },
 
-    pdf_data: function() {
-        return PDFFiles.find({}, {sort: {pageindex: 1}});
+    //pdf_data: function() {
+    //    return PDFFiles.find({}, {sort: {pageindex: 1}});
+    //}
+    page_data: function() {
+        return PagesInfo.find({}, {sort: {page: 1}});
+    },
+
+    generate_code: function(page, directory, code) {
+        window.setTimeout(function() {
+            $('#'+page+'_'+directory).html(code);
+        }, 1000);
+        console.log("!!!");
+        console.log(page);
+        console.log(directory);
+        $('#'+page+'_'+directory).html(code);
+        $('#'+page+'_'+directory).html("abcdefg");
+        console.log($('#'+page+'_'+directory).html());
+        console.log($('#1_Cover').html());
+    },
+
+    // Swiper
+    Swiper: function() {
+        return MySwiper.Swiper;
     }
 });
+
+
+MySwiper = {
+    Swiper: new Swipe(),
+    Initialize: function() {
+        MySwiper.Swiper = new Swipe(['CoverPage', 'ContentPage']);
+    }
+}
 
 function DrawPDF(url, page) {
     $('#Testing').hide();

@@ -7,6 +7,7 @@
 
     <!-- include summernote css/js-->
     <link href="summernote.css" rel="stylesheet">
+    <script src="summernote.js"></script>
     <script src="summernote.min.js"></script>
 </head>
 
@@ -23,7 +24,8 @@
                     <div>
                         <ul class="nav navbar-nav">
                             <li class="active"><a class="nav-tab" href="#" value="overview">Overview</a></li>
-                            <li><a class="nav-tab" href="#" value="add-pile">Add PDF</a></li>
+                            <li><a type="button" class="chapter-add-btn" data-toggle="modal" data-target="#AddChapterModel">Add Chapter</a></li>
+                            <li><a class="nav-tab" href="#" value="add-pile">Add Page</a></li>
                         </ul>
                     </div>
                 </div>
@@ -34,56 +36,82 @@
                     <thead>
                     <tr>
                         <th>Index</th>
-                        <th>Directory</th>
-                        <th>PDF File</th>
-                        <th>URL</th>
-                        <th>Create Date</th>
-                        <th>By</th>
-                        <th></th>
-                        <th></th>
+                        <th>Chapter Name</th>
+                        <th>Edit</th>
+                        <th>Delete</th>
                     </tr>
                     </thead>
                     <tbody>
-                    {{#each pdf_data}}
+                    {{#each chapter_data}}
                         <tr>
-                            <td>{{pageindex}}</td>
-                            <td>{{directory}}</td>
-                            <td style="text-align:left;">{{info.name}}</td>
-                            <td style="text-align:left;"><a href="{{info.url}}" target="_blank">{{info.url}}</a></td>
-                            <td style="text-align:left;">{{createAt}}</td>
-                            <td>{{createBy.name}}</td>
-                            <td><button type="button" class="btn btn-info btn-sm edit-btn"  data-toggle="modal" data-target="#EditModel">Edit</button></td>
-                            <td><button type="button" class="btn btn-danger btn-sm delete-btn">X</button></td>
+                            <td>{{index}}</td>
+                            <td>{{name}}</td>
+                            <td><button type="button" class="btn btn-info btn-sm chapter-edit-btn"  data-toggle="modal" data-target="#AddChapterModel">Edit</button></td>
+                            <td><button type="button" class="btn btn-danger btn-sm chapter-delete-btn">X</button></td>
                         </tr>
                     {{/each}}
                     </tbody>
                 </table>
             </div>
 
-            <div id="AddPDF" class="page-item" style="display:none;">
-                <h2>Add PDF</h2>
-                <div id="summernote">Hello Summernote</div>
+            <div id="AddPage" class="page-item" style="display:none;">
+                <h2>Add Page</h2>
                 <div class="pile-form">
                     <div class="alert alert-danger" style="display:none;">
                         <strong>Error!</strong> occured.
                     </div>
-                    <div class="form-group" style="display:inline-block; width:60%;">
+                    <div class="form-group" style="display:inline-block; width:40%;">
                         <label>Directory Name:</label>
-                        <input type="text" class="form-control" placeholder="Directory Name (Empty for using the file name)">
+                        <input type="text" class="form-control" placeholder="Directory Name">
                     </div>
-                    <div class="form-group" style="display:inline-block; width:20%; margin-left:19.5%;">
-                        <label>Index:</label>
+                    <div class="form-group" style="display:inline-block; width:20%; margin-left:8%;">
+                        <label>Chapter:</label>
+                        <input class="form-control" type="text" list="chapter_list">
+                        <datalist id="chapter_list">
+                            {{#each chapter_data}}
+                                <option value="{{name}}">{{name}}</option>
+                            {{/each}}
+                        </datalist>
+                    </div>
+                    <div class="form-group" style="display:inline-block; width:20%; margin-left:8%;">
+                        <label>Page:</label>
                         <input class="form-control" type="number" min="1" step="1" value="1">
                     </div>
+                    <div id="summernote"></div>
                     <br>
-                    <div id="AddPDF_SubDir">
+                    <button type="button" class="btn btn-primary btn-sm submit-page">Submit</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Chapter Model -->
+        <div id="AddChapterModel" class="modal fade" role="dialog">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header list-group-item-info">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <h4 class="modal-title">Add Chapter</h4>
                     </div>
-                    <button type="button" class="btn btn-primary btn-sm add-sub-directory">Add Sub Directory</button>
-                    <br>
-                    <br>
-                    <div class="form-group">
-                        <label>PDF File:</label>
-                        {{> upload_bootstrap fileTypes='.pdf' multiple=false callbacks=uploadFinished}}
+                    <div class="modal-body">
+                        <div role="form">
+                            <label style="display:none;"></label>
+                            <div class="alert alert-danger" style="display:none;">
+                                <strong>Error!</strong> occured.
+                            </div>
+                            <div class="form-group" style="display:inline-block; width:60%;">
+                                <label>Chapter Name:</label>
+                                <input type="text" class="form-control" placeholder="Chapter Name">
+                            </div>
+                            <div class="form-group" style="display:inline-block; width:20%; margin-left:10%;">
+                                <label>Index:</label>
+                                <input class="form-control" type="number" min="1" step="1" value="1">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button class="btn btn-success chapter-submit-btn">Submit</button>
+                        <button class="btn btn-success chapter-edit-submit-btn">Save</button>
+                        <button class="btn btn-danger" data-dismiss="modal">Close</button>
                     </div>
                 </div>
             </div>

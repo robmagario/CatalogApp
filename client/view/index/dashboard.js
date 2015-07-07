@@ -35,18 +35,159 @@ Template.dashboard.events({
         $('#'+_value).find('alert').html("").hide();
         $('#'+_value).show();
 
-        $('#AddPDF').find('input').val('');
-        $('#AddPDF').find('input').eq(1).val(1);
+        $('#AddPage').find('input').val('');
+        $('#AddPage').find('input').eq(1).val("");
+        $('#AddPage').find('input').eq(2).val(1);
+    },
+
+    // Press Add Chapter
+    'click .chapter-add-btn': function() {
+        // Blank the Column
+        $('#AddChapterModel').find('label').eq(0).html("");
+        $('#AddChapterModel').find('input').eq(0).val("");
+        $('#AddChapterModel').find('input').eq(1).val(1);
+        // Hide Alert Message
+        $('#AddChapterModel').find('.alert').hide();
+        // Hide Edit Button
+        $('#AddChapterModel').find('.chapter-edit-submit-btn').hide();
+    },
+
+    // Submit Add Chapter
+    'click .chapter-submit-btn': function() {
+        // Get value from the form
+        var _chapter = $('#AddChapterModel').find('input').eq(0).val().trim();
+        var _index = parseInt($('#AddChapterModel').find('input').eq(1).val());
+        if(_chapter == "" || _chapter == null) {
+            // Show if Chapter Name is Empty
+            $('#AddChapterModel').find('.alert').html("<strong>Please defind a name for the new chapter!</strong>").show();
+        } else if(isNaN(_index)) {
+            // Show if page index is not a number
+            $('#AddChapterModel').find('.alert').html("<strong>Please make sure that the page column is a number</strong>").show();
+        } else {
+            // Let the origin index to be the next one
+            var _currentIndex = _index;
+            var _currentChapter = ChapterInfo.findOne({index: _currentIndex});
+            while(_currentChapter != null) {
+                var _nextIndex = _currentIndex + 1;
+                var _nextChapter = ChapterInfo.findOne({index: _nextIndex});
+                ChapterInfo.update({_id: _currentChapter._id}, {$set: {
+                    index: _nextIndex
+                }});
+                _currentIndex = _nextIndex;
+                _currentChapter = _nextChapter;
+            }
+            // Insert Data
+            ChapterInfo.insert({
+                name: _chapter,
+                index: _index
+            }, function() {
+                location.reload();
+            });
+        }
+    },
+
+    // Press Add Chapter
+    'click .chapter-edit-btn': function() {
+        // Fill the Column
+        $('#AddChapterModel').find('label').eq(0).html(this._id);
+        $('#AddChapterModel').find('input').eq(0).val(this.name);
+        $('#AddChapterModel').find('input').eq(1).val(this.index);
+        // Hide Alert Message
+        $('#AddChapterModel').find('.alert').hide();
+        // Hide Edit Button
+        $('#AddChapterModel').find('.chapter-submit-btn').hide();
+    },
+
+    // Save Change of Chapter
+    'click .chapter-edit-submit-btn': function() {
+        // Get value from the form
+        var _id = $('#AddChapterModel').find('label').eq(0).html();
+        var _chapter = $('#AddChapterModel').find('input').eq(0).val().trim();
+        var _index = parseInt($('#AddChapterModel').find('input').eq(1).val());
+        if(_chapter == "" || _chapter == null) {
+            // Show if Chapter Name is Empty
+            $('#AddChapterModel').find('.alert').html("<strong>Please defind a name for the new chapter!</strong>").show();
+        } else if(isNaN(_index)) {
+            // Show if page index is not a number
+            $('#AddChapterModel').find('.alert').html("<strong>Please make sure that the page column is a number</strong>").show();
+        } else {
+            // Let the origin index to be the next one
+            var _currentIndex = _index;
+            var _currentChapter = ChapterInfo.findOne({index: _currentIndex});
+            while(_currentChapter != null) {
+                var _nextIndex = _currentIndex + 1;
+                var _nextChapter = ChapterInfo.findOne({index: _nextIndex});
+                ChapterInfo.update({_id: _currentChapter._id}, {$set: {
+                    index: _nextIndex
+                }});
+                _currentIndex = _nextIndex;
+                _currentChapter = _nextChapter;
+            }
+            // Insert Data
+            ChapterInfo.update({_id:_id}, {$set: {
+                name: _chapter,
+                index: _index
+            }}, function() {
+                location.reload();
+            });
+        }
+    },
+
+    // Delete a chapter
+    'click .chapter-delete-btn': function() {
+        ChapterInfo.remove({_id:this._id});
     },
 
     // Open Dropdown Menu
+    'click .dropdown-toggle': function(e) {
+        if(e.currentTarget.parentElement.children[1].style.display == "" ||
+            e.currentTarget.parentElement.children[1].style.display == "none" ||
+            e.currentTarget.parentElement.children[1].style.display == null) {
+            e.currentTarget.parentElement.children[1].style.display = "block";
+        } else {
+            e.currentTarget.parentElement.children[1].style.display = "none";
+        }
+    },
 
+    // Close Dropdown Menu
+    'click .btn, click .formatBlock, click .dropdown-menu, click a': function(e) {
+        log.show(e.currentTarget.parentElement.parentElement.classList[0]);
+        if(e.currentTarget.parentElement.parentElement.classList[0] == "dropdown-menu") {
+            e.currentTarget.parentElement.parentElement.style.display = "none";
+        }
+    },
 
+    // Submit Page
+    'click .submit-page': function() {
+        var _directory = $('#AddPage').find('input').eq(0).val();
+        var _chapter = $('#AddPage').find('input').eq(1).val();
+        var _page = $('#AddPage').find('input').eq(2).val();
+        var _code = $('#summernote').code();
+        log.show("Directory: " + _directory);
+        log.show("Chapter: " + _chapter);
+        log.show("Page: " + _page);
 
-
-
-
-
+        if(isNaN(_page)) {
+            $('#AddPage').find('.alert').html("Incorrect Page").show();
+        } else {
+            var _date = new Date();
+            var _userId = Meteor.userId();
+            var _user = Meteor.user().username;
+            PagesInfo.insert({
+                userId: _userId,
+                username: _user,
+                directory: _directory,
+                chapter: _chapter,
+                page: _page,
+                code: _code,
+                createAt: _date
+            }, function() {
+                // Callback
+                alert("Page Added Successfully!");
+                location.reload();
+            });
+        }
+    },
 
     // Add Sub Directory
     'click .add-sub-directory': function() {
@@ -221,8 +362,18 @@ Template.dashboard.helpers({
     },
 
     // Get PDF Data
-    pdf_data: function() {
-        return PDFFiles.find({}, {sort: {pageindex: 1}});
+    //pdf_data: function() {
+    //    return PDFFiles.find({}, {sort: {pageindex: 1}});
+    //},
+
+    // Get Chapter Data
+    chapter_data: function() {
+        return ChapterInfo.find({}, {sort: {index: 1}});
+    },
+
+    // Get Page Data
+    page_data: function() {
+        return PagesInfo.find({}, {sort: {page: 1}});
     },
 
     // Get Sub Directory
@@ -302,7 +453,7 @@ Template.dashboard.helpers({
 
 // Show Log
 log = {
-    active: false,
+    active: true,
     show: function(message) {
         if(this.active) {
             console.log(message);

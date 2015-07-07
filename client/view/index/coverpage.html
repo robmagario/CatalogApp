@@ -1,7 +1,13 @@
 <head>
     <!--<link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">-->
     <meta name="viewport" content="initial-scale=1.0"/>
+
+    <script src="plugin/owl.carousel.js"></script>
 </head>
+
+<body data-hijacking="off" data-animation="scaleDown">
+
+</body>
 
 <template name="cover">
     <!--Web View-->
@@ -41,38 +47,86 @@
             </div>
         </div>
         <!--<div class="wrapper no-swipe swipe-control scrollable">-->
-            <!--{{>swipe Swiper=Swiper}}-->
+            <!--{{>swipe Swiper=MySwiper.Swiper}}-->
         <!--</div>-->
     {{/if}}
 
     <!--Mobile View-->
     {{#if IsMoblie}}
-        <nav class="navbar navbar-inverse" style="margin-bottom:0;">
-            <div class="container-fluid">
-                <div style="display:inline-block;">
-                    <ul class="nav navbar-nav">
-                        <li><a href="#"><span class="glyphicon glyphicon-menu-hamburger" style="font-size:32px;"></span></a></li>
-                    </ul>
+        <section class="bg-gray">
+            <div class="container text-center wow fadeIn">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <h2>{{ourteam_header}}</h2>
+                        <p>{{ourteam_header_subtext}}</p>
+                        <hr class="colored">
+                    </div>
                 </div>
-                <div class="navbar-header" style="display:inline-block;">
-                    <a class="navbar-brand" href="#" style="font-size:32px; padding-top:26px;"> ESC Pile</a>
+                <div class="row content-row">
+                    <div class="col-lg-12">
+                        <div class="about-carousel">
+                            <div class="item">
+                                <img src="/img/esc-pile-logo-transparent.png" class="img-responsive" alt="">
+                                <div class="caption">
+                                    <h3>{{ourteam_img1_name}}</h3>
+                                    <hr class="colored">
+                                    <p>{{ourteam_img1_pos}}</p>
+                                    <ul class="list-inline social">
+                                        <li>
+                                            <a href="mailto:robson@magario.com"><i class="fa fa-envelope fa-fw"></i></a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="item">
+                                <img src="/img/toddfinal.png" class="img-responsive" alt="">
+                                <div class="caption">
+                                    <h3>{{ourteam_img2_name}}</h3>
+                                    <hr class="colored">
+                                    <p>{{ourteam_img2_pos}}</p>
+                                    <ul class="list-inline social">
+                                        <li>
+                                            <a href="https://www.facebook.com/todd.katsuyama"><i class="fa fa-facebook fa-fw"></i></a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
-        </nav>
-        <div class="sidebar" style="z-index:2;">
-                <ul class="nav nav-pills nav-stacked" style="height:100%; overflow:auto;">
-                    <li class="sidebar-home active"><a href="#">Home</a></li>
-                    <!--<li class="sidebar-test"><a href="#">Testing123456</a></li>-->
-                    {{#each pdf_data}}
-                        <div id="{{info.url}}">
-                            <li class="sidebar-item">{{directory}}</li>
-                            {{#each sub_dir}}
-                                <li class="sidebar-item-sub"> - {{name}}</li>
-                            {{/each}}
-                        </div>
-                    {{/each}}
-                </ul>
-        </div>
+        </section>
+        <!--<div class="wrapper">-->
+            <!--{{>swipe Swiper=Swiper}}-->
+        <!--</div>-->
+
+        <!--<nav class="navbar navbar-inverse" style="margin-bottom:0;">-->
+            <!--<div class="container-fluid">-->
+                <!--<div style="display:inline-block;">-->
+                    <!--<ul class="nav navbar-nav">-->
+                        <!--<li><a href="#"><span class="glyphicon glyphicon-menu-hamburger" style="font-size:32px;"></span></a></li>-->
+                    <!--</ul>-->
+                <!--</div>-->
+                <!--<div class="navbar-header" style="display:inline-block;">-->
+                    <!--<a class="navbar-brand" href="#" style="font-size:32px; padding-top:26px;"> ESC Pile</a>-->
+                <!--</div>-->
+            <!--</div>-->
+        <!--</nav>-->
+        <!--<div class="sidebar" style="z-index:2;">-->
+                <!--<ul class="nav nav-pills nav-stacked" style="height:100%; overflow:auto;">-->
+                    <!--<li class="sidebar-home active"><a href="#">Home</a></li>-->
+                    <!--&lt;!&ndash;<li class="sidebar-test"><a href="#">Testing123456</a></li>&ndash;&gt;-->
+                    <!--{{#each pdf_data}}-->
+                        <!--<div id="{{info.url}}">-->
+                            <!--<li class="sidebar-item">{{directory}}</li>-->
+                            <!--{{#each sub_dir}}-->
+                                <!--<li class="sidebar-item-sub"> - {{name}}</li>-->
+                            <!--{{/each}}-->
+                        <!--</div>-->
+                    <!--{{/each}}-->
+                <!--</ul>-->
+        <!--</div>-->
+
 
         <!-- In your template -->
         <!--<div id="Testing" style="width:100%; height:100%; position:absolute; z-index:0;">-->
@@ -91,12 +145,44 @@
         <!--<button class="btn btn-info btn-lg" data-toggle="modal" data-target="#LoginModel"><span class="glyphicon glyphicon-right-arrow" style="font-size:32px;"></span></button>-->
 
         <!--<iframe id="showframe" src="indexpage" style="width:100%;"></iframe>-->
-        <object id="show_pdf_obj" data="" type="application/pdf" style="width:100%; height:88.5%;">
-            <embed id="show_pdf_emb" src="" type="application/pdf" />
-        </object>
+        <!--<object id="show_pdf_obj" data="" type="application/pdf" style="width:100%; height:88.5%;">-->
+            <!--<embed id="show_pdf_emb" src="" type="application/pdf" />-->
+        <!--</object>-->
 
+        <!--<div id="myCarousel" class="carousel slide" data-ride="carousel" style="z-index:-1; max-width:100%; max-height:100%; overflow:hidden; top:0; position:absolute;">-->
+            <!--&lt;!&ndash; Wrapper for slides &ndash;&gt;-->
+            <!--<div class="carousel-inner" role="listbox">-->
+                <!--{{#each page_data}}-->
+                    <!--<div class="item">-->
+                        <!--<div id="{{page}}_{{directory}}">{{generate_code page directory code}}</div>-->
+                    <!--</div>-->
+                <!--{{/each}}-->
+                <!--&lt;!&ndash;<div class="item active">&ndash;&gt;-->
+                    <!--&lt;!&ndash;<img src="img_chania.jpg" alt="Chania">&ndash;&gt;-->
+                <!--&lt;!&ndash;</div>&ndash;&gt;-->
 
+                <!--&lt;!&ndash;<div class="item">&ndash;&gt;-->
+                    <!--&lt;!&ndash;<img src="img_chania2.jpg" alt="Chania">&ndash;&gt;-->
+                <!--&lt;!&ndash;</div>&ndash;&gt;-->
+
+                <!--&lt;!&ndash;<div class="item">&ndash;&gt;-->
+                    <!--&lt;!&ndash;<img src="img_flower.jpg" alt="Flower">&ndash;&gt;-->
+                <!--&lt;!&ndash;</div>&ndash;&gt;-->
+
+                <!--&lt;!&ndash;<div class="item">&ndash;&gt;-->
+                    <!--&lt;!&ndash;<img src="img_flower2.jpg" alt="Flower">&ndash;&gt;-->
+                <!--&lt;!&ndash;</div>&ndash;&gt;-->
+            <!--</div>-->
+        <!--</div>-->
     {{/if}}
+</template>
+
+<template name="CoverPage">
+    <img src="img/esc-pile-logo-transparent.png" style="margin: auto;">
+</template>
+
+<template name="ContentPage">
+
 </template>
 
 <!--<template name="BlankTemp">-->

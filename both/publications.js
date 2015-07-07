@@ -5,6 +5,8 @@
 if (Meteor.isClient) {
     Meteor.subscribe("user_data");
     Meteor.subscribe("pdf_file_data");
+    Meteor.subscribe("chapter_info_data");
+    Meteor.subscribe("page_info_data");
 }
 
 if (Meteor.isServer) {
@@ -13,5 +15,11 @@ if (Meteor.isServer) {
     });
     Meteor.publish("pdf_file_data", function () {
         return PDFFiles.find();
+    });
+    Meteor.publish("chapter_info_data", function () {
+        return ChapterInfo.find();
+    });
+    Meteor.publish("page_info_data", function () {
+        return PagesInfo.find();
     });
 }
