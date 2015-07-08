@@ -52,17 +52,25 @@ Template.dashboard.events({
         $('#AddChapterModel').find('.chapter-edit-submit-btn').hide();
     },
 
+    'change #AddChapterIcon': function() {
+
+    },
+
     // Submit Add Chapter
     'click .chapter-submit-btn': function() {
         // Get value from the form
         var _chapter = $('#AddChapterModel').find('input').eq(0).val().trim();
         var _index = parseInt($('#AddChapterModel').find('input').eq(1).val());
+        var _icon = $('#AddChapterIcon').attr('src');
         if(_chapter == "" || _chapter == null) {
             // Show if Chapter Name is Empty
             $('#AddChapterModel').find('.alert').html("<strong>Please defind a name for the new chapter!</strong>").show();
         } else if(isNaN(_index)) {
             // Show if page index is not a number
             $('#AddChapterModel').find('.alert').html("<strong>Please make sure that the page column is a number</strong>").show();
+        } else if(_icon == "" || _icon == null) {
+            // Show if no icon
+            $('#AddChapterModel').find('.alert').html("<strong>Please upload an image as icon</strong>").show();
         } else {
             // Let the origin index to be the next one
             var _currentIndex = _index;
@@ -79,7 +87,8 @@ Template.dashboard.events({
             // Insert Data
             ChapterInfo.insert({
                 name: _chapter,
-                index: _index
+                index: _index,
+                icon: _icon
             }, function() {
                 location.reload();
             });

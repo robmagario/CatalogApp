@@ -19,6 +19,24 @@ Template.cover.rendered = function() {
     if (MyBrowser == "Mobile") {
     }
 
+
+    //var myScroll = new IScroll('#wrapper', {
+    //    mouseWheel: true,
+    //    scrollbars: true,
+    //    indicators: {
+    //        el: document.getElementById('indicator'),
+    //        fade: false,
+    //        ignoreBoundaries: false,
+    //        interactive: false,
+    //        listenX: true,
+    //        listenY: true,
+    //        resize: true,
+    //        shrink: false,
+    //        speedRatioX: 0,
+    //        speedRatioY: 0
+    //    }
+    //});
+
     //$('#Testing').html(location.href);
 
     //// Swiper
@@ -35,45 +53,57 @@ Template.cover.rendered = function() {
 
     // Plugin
     // Owl Carousel Settings
-    $(".about-carousel").owlCarousel({
-        items: 3,
-        navigation: true,
-        pagination: false,
-        navigationText: [
-            "<i class='fa fa-angle-left'></i>",
-            "<i class='fa fa-angle-right'></i>"
-        ]
-    });
+    //$(".about-carousel").owlCarousel({
+    //    items: 3,
+    //    navigation: true,
+    //    pagination: false,
+    //    navigationText: [
+    //        "<i class='fa fa-angle-left'></i>",
+    //        "<i class='fa fa-angle-right'></i>"
+    //    ]
+    //});
 
-    $(".portfolio-carousel").owlCarousel({
-        singleItem: true,
-        navigation: true,
-        pagination: false,
-        navigationText: [
-            "<i class='fa fa-angle-left'></i>",
-            "<i class='fa fa-angle-right'></i>"
-        ],
-        autoHeight: true,
-        mouseDrag: false,
-        touchDrag: false,
-        transitionStyle: "fadeUp"
-    });
+    //$(".portfolio-carousel").owlCarousel({
+    //    singleItem: true,
+    //    navigation: true,
+    //    pagination: false,
+    //    navigationText: [
+    //        "<i class='fa fa-angle-left'></i>",
+    //        "<i class='fa fa-angle-right'></i>"
+    //    ],
+    //    autoHeight: true,
+    //    mouseDrag: false,
+    //    touchDrag: false,
+    //    transitionStyle: "fadeUp"
+    //});
 
     $(".testimonials-carousel").owlCarousel({
         singleItem: true,
-        navigation: true,
-        pagination: true,
+        //navigation: true,
+        pagination: false,
         autoHeight: true,
-        navigationText: [
-            "<i class='fa fa-angle-left'></i>",
-            "<i class='fa fa-angle-right'></i>"
-        ],
+        //navigationText: [
+        //    "<i class='fa fa-angle-left'></i>",
+        //    "<i class='fa fa-angle-right'></i>"
+        //],
         transitionStyle: "backSlide"
     });
 
-    $(".portfolio-gallery").owlCarousel({
-        items: 3,
+    $(".each-chapter-carousel").owlCarousel({
+        singleItem: true,
+        //navigation: true,
+        pagination: false,
+        autoHeight: true,
+        //navigationText: [
+        //    "<i class='fa fa-angle-left'></i>",
+        //    "<i class='fa fa-angle-right'></i>"
+        //],
+        transitionStyle: "backSlide"
     });
+    //
+    //$(".portfolio-gallery").owlCarousel({
+    //    items: 3,
+    //});
 
     // Magnific Popup jQuery Lightbox Gallery Settings
     $('.gallery-link').magnificPopup({
@@ -258,18 +288,18 @@ Template.cover.helpers({
     },
 
     // Swiper
-    Swiper: function() {
-        return MySwiper.Swiper;
-    }
+    //Swiper: function() {
+    //    return MySwiper.Swiper;
+    //}
 });
 
 
-MySwiper = {
-    Swiper: new Swipe(),
-    Initialize: function() {
-        MySwiper.Swiper = new Swipe(['CoverPage', 'ContentPage']);
-    }
-}
+//MySwiper = {
+//    Swiper: new Swipe(),
+//    Initialize: function() {
+//        MySwiper.Swiper = new Swipe(['CoverPage', 'ContentPage']);
+//    }
+//}
 
 function DrawPDF(url, page) {
     $('#Testing').hide();

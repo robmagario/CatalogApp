@@ -47,7 +47,9 @@ nooitaf:semantic-ui@1.10.4
 npm-bcrypt@0.7.8_2
 observe-sequence@1.0.6
 ordered-dict@1.0.3
+owl-carousel@0.0.0
 pascoual:pdfjs@1.1.114
+raix:iscroll@0.0.3
 random@1.0.3
 reactive-dict@1.1.0
 reactive-var@1.0.5
