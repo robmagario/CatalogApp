@@ -77,17 +77,19 @@ Template.cover.rendered = function() {
     //    transitionStyle: "fadeUp"
     //});
 
-    $(".testimonials-carousel").owlCarousel({
-        singleItem: true,
-        //navigation: true,
-        pagination: false,
-        autoHeight: true,
-        //navigationText: [
-        //    "<i class='fa fa-angle-left'></i>",
-        //    "<i class='fa fa-angle-right'></i>"
-        //],
-        transitionStyle: "backSlide"
-    });
+    window.setTimeout(function() {
+        $(".testimonials-carousel").owlCarousel({
+            singleItem: true,
+            //navigation: true,
+            pagination: false,
+            autoHeight: true,
+            //navigationText: [
+            //    "<i class='fa fa-angle-left'></i>",
+            //    "<i class='fa fa-angle-right'></i>"
+            //],
+            transitionStyle: "backSlide"
+        });
+    }, 1000);
 
     $(".each-chapter-carousel").owlCarousel({
         singleItem: true,
@@ -270,22 +272,26 @@ Template.cover.helpers({
     //pdf_data: function() {
     //    return PDFFiles.find({}, {sort: {pageindex: 1}});
     //}
+    chapter_data: function() {
+        return ChapterInfo.find({}, {sort: {index: 1}});
+    },
+
     page_data: function() {
         return PagesInfo.find({}, {sort: {page: 1}});
     },
 
-    generate_code: function(page, directory, code) {
+    page_data_in_chapter: function(chapter) {
+        return PagesInfo.find({chapter: chapter}, {sort: {page: 1}});
+    },
+
+    generate_code: function(_id, code) {
         window.setTimeout(function() {
-            $('#'+page+'_'+directory).html(code);
+            $('#'+_id).html(code);
         }, 1000);
         console.log("!!!");
-        console.log(page);
-        console.log(directory);
-        $('#'+page+'_'+directory).html(code);
-        $('#'+page+'_'+directory).html("abcdefg");
-        console.log($('#'+page+'_'+directory).html());
-        console.log($('#1_Cover').html());
-    },
+        $('#'+_id).html(code);
+        return null;
+    }
 
     // Swiper
     //Swiper: function() {
