@@ -174,6 +174,23 @@ th, td {
   }
 }
 
+.favbar {
+  left: 100%;
+  width: 40%;
+  position: fixed;
+  .sidebar-home,
+  .sidebar-test,
+  .sidebar-item,
+  .sidebar-item-sub{
+    margin: 0;
+    font-size: 16px;
+    background-color: #FFFFFF;
+    border-left: solid 2px grey;
+    border-right: solid 2px grey;
+    border-bottom: solid 2px grey;
+  }
+}
+
 .chapter-header {
   height: 268px;
   background-color: #fff;
@@ -258,6 +275,16 @@ th:first-child div{
   border: none;
 }
 
+.item > table > thead > tr > td {
+  border: black 2px solid;
+}
+
+table > thead > tr > td,
+table > tbody > tr > td {
+  border-left: white 6px solid;
+  border-right: white 6px solid;
+}
+
 #showframe,
 .sidebar {
   height: 89%;
@@ -279,4 +306,21 @@ th:first-child div{
 @keyframes SidebarClose {
   from {left: 0%;}
   to {left: -40%;}
+}
+
+@-webkit-keyframes FavbarOpen {
+  from {left: 100%;}
+  to {left: 60%;}
+}
+@keyframes FavbarOpen {
+  from {left: 100%;}
+  to {left: 60%;}
+}
+@-webkit-keyframes FavbarClose {
+  from {left: 60%;}
+  to {left: 100%;}
+}
+@keyframes FavbarClose {
+  from {left: 60%;}
+  to {left: 100%;}
 }

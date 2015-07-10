@@ -4,6 +4,7 @@
 
 var MyBrowser;
 var SidebarOpen = false;
+var FavbarOpen = false;
 
 var pdf_url = "";
 var pdf_page = 0;
@@ -158,6 +159,13 @@ Template.cover.events({
         }
     },
 
+    // Open Narbar
+    'click section': function(e) {
+        if(e.pageY < 50) {
+
+        }
+    },
+
     // Sidebar Events
     'click .glyphicon-menu-hamburger': function() {
         if(SidebarOpen) {
@@ -170,6 +178,57 @@ Template.cover.events({
             SidebarOpen = true;
         }
     },
+
+    // Favbar Events
+    'click .glyphicon-star': function() {
+        if(FavbarOpen) {
+            log.show("Close Favbar");
+            $('.favbar').css({left:'100%', animation: 'FavbarClose 0.5s', '-webkit-animation': 'FavbarClose 0.5s'});
+            FavbarOpen = false;
+        } else {
+            log.show("Open Favbar");
+            $('.favbar').css({left:'60%', animation: 'FavbarOpen 0.5s', '-webkit-animation': 'FavbarOpen 0.5s'});
+            FavbarOpen = true;
+        }
+    },
+
+    // Scroll to Chapter
+    'click .navbar-brand': function(e) {
+        var owl = $(".owl-carousel").data('owlCarousel');
+        owl.goTo(0);
+        if(SidebarOpen) {
+            log.show("Close Sidebar");
+            $('.sidebar').css({left:'-40%', animation: 'SidebarClose 0.5s', '-webkit-animation': 'SidebarClose 0.5s'});
+            SidebarOpen = false;
+        }
+    },
+    'click .pointer-to-chapter': function(e) {
+        var _page = e.currentTarget.id;
+        var _sidebar = true;
+        if(_page.indexOf("Menu") < 0) {
+            _sidebar = false;
+        }
+        _page = _page.replace("Menu","");
+        _page = _page.replace("Content","");
+        _page = parseInt(_page);
+        var owl = $(".owl-carousel").data('owlCarousel');
+        owl.goTo(_page - 1);
+
+        //if(_sidebar) {
+        //    log.show("Close Sidebar");
+        //    $('.sidebar').css({left:'-40%', animation: 'SidebarClose 0.5s', '-webkit-animation': 'SidebarClose 0.5s'});
+        //    SidebarOpen = false;
+        //}
+        if(SidebarOpen) {
+            log.show("Close Sidebar");
+            $('.sidebar').css({left:'-40%', animation: 'SidebarClose 0.5s', '-webkit-animation': 'SidebarClose 0.5s'});
+            SidebarOpen = false;
+        }
+        return null;
+    },
+
+
+
     'click .sidebar-home': function() {
         log.show("Select Home");
         //$('#showframe').attr('src', 'indexpage');
@@ -288,7 +347,6 @@ Template.cover.helpers({
         window.setTimeout(function() {
             $('#'+_id).html(code);
         }, 1000);
-        console.log("!!!");
         $('#'+_id).html(code);
         return null;
     }

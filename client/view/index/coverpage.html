@@ -54,6 +54,45 @@
 
     <!--Mobile View-->
     {{#if IsMoblie}}
+        <nav class="navbar navbar-default" style="margin:0;  position:fixed; width:100%; z-index:3;">
+            <div class="container-fluid" style="width:100%;">
+                <div class="navbar-header" style="margin-left:auto margin-right:auto; width:100%;">
+                    <a class="navbar-brand" href="#"  style="margin-left:auto margin-right:auto; width:100%; text-align:center; position:absolute; font-size:32px; line-height:1.1;">Catalog App</a>
+                </div>
+                <div>
+                    <ul class="nav navbar-nav">
+                        <li><a href="#"><span class="glyphicon glyphicon-menu-hamburger" style="transform:scale(2); z-index:2; width:100%;"></span></a></li>
+                    </ul>
+                    <ul class="nav navbar-nav navbar-right">
+                        <li><a href="#"><span class="glyphicon glyphicon-star" style="transform:scale(2);"></span></a></li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+
+        <div class="sidebar" style="z-index:2; top:60px;">
+            <ul class="nav nav-pills nav-stacked" style="height:100%; overflow:auto;">
+                <li id="Menu2" class="pointer-to-chapter sidebar-test">Content</li>
+                {{#each chapter_data}}
+                    <div id="Menu{{index}}" class="pointer-to-chapter" style="max-height:100px; display:flex; display:-webkit-flex; background-color:white;">
+                        <div style="width:160px; height:100px; border:solid 4px #AACCAA; overflow:hidden;"><img src="{{icon}}" width="160px"></div>
+                        <p style="font-size:20px; padding:5px;">{{name}}</p>
+                    </div>
+                {{/each}}
+            </ul>
+        </div>
+
+        <div class="favbar" style="z-index:2; top:60px;">
+            <ul class="nav nav-pills nav-stacked" style="height:100%; overflow:auto;">
+                <li id="Menu2" class="pointer-to-chapter sidebar-test">FFFFFFFFF</li>
+                {{#each chapter_data}}
+                    <div id="Menu{{index}}" class="pointer-to-chapter" style="max-height:100px; display:flex; display:-webkit-flex; background-color:white;">
+                        <div style="height:160px; border:solid 4px #AACCAA; overflow:hidden;"><img src="{{icon}}"></div>
+                        <p style="font-size:20px; padding:5px;">{{name}}</p>
+                    </div>
+                {{/each}}
+            </ul>
+        </div>
 
         <section class="testimonials bg-gray">
             <div class="container wow fadeIn">
@@ -70,7 +109,7 @@
                                     <div class="chapter-header">Contents</div>
                                     <div class="contents-board">
                                         {{#each chapter_data}}
-                                            <div class="col-sm-3" style="min-height:200px;">
+                                            <div id="Content{{index}}" class="col-sm-3 pointer-to-chapter" style="min-height:200px;">
                                                 <div style="height:160px; border:solid 4px #AACCAA; overflow:hidden;"><img src="{{icon}}"></div>
                                                 <p style="font-size:20px; padding:5px;">{{name}}</p>
                                             </div>
