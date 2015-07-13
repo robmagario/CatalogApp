@@ -200,13 +200,19 @@ th, td {
   font-size: 36px;
   color: orangered;
   font-family: serif;
+  position: fixed;
+  width:100%;
+  left:0;
+  top:0;
+  height:20%;
 }
 .contents-board {
   width: 100%;
   height: 500px;
   background-color: #fff;
-  border: solid 50px #fff;
+  border: solid 0px #fff;
   overflow: scroll;
+  margin-top: 15%;
 }
 .item {
   padding: 5px;
@@ -214,8 +220,26 @@ th, td {
 
 html > body {
   overflow: auto;
-  background-color: #AACCAA;
+  //background-color: #AACCAA;
 }
+
+//table {
+//  width: 100%;
+//  overflow: scroll;
+//  border: black 4px solid;
+//  border-collapse: collapse;
+//  thead > tr > th,
+//  thead > tr > td {
+//    border: black 2px solid;
+//  }
+//  tbody > tr > td {
+//    border: black 2px solid;
+//  }
+//
+//  tbody > tr > td {
+//    border: black 2px solid;
+//  }
+//}
 
 //html, body{
 //  margin:0;
@@ -239,51 +263,51 @@ html > body {
 //  overflow-y: auto;
 //  height: 200px;
 //}
-table {
-  border-spacing: 0;
-  width:100%;
-}
-td + td {
-  border-left:1px solid #eee;
-}
-td, th {
-  border-bottom:1px solid #eee;
-  background: #ddd;
-  color: #000;
-  padding: 10px 25px;
-}
-th {
-  height: 0;
-  line-height: 0;
-  padding-top: 0;
-  padding-bottom: 0;
-  color: transparent;
-  border: none;
-  white-space: nowrap;
-}
-th div{
-  position: absolute;
-  background: transparent;
-  color: #fff;
-  padding: 9px 25px;
-  top: 0;
-  margin-left: -25px;
-  line-height: normal;
-  border-left: 1px solid #800;
-}
-th:first-child div{
-  border: none;
-}
-
-.item > table > thead > tr > td {
-  border: black 2px solid;
-}
-
-table > thead > tr > td,
-table > tbody > tr > td {
-  border-left: white 6px solid;
-  border-right: white 6px solid;
-}
+//table {
+//  border-spacing: 0;
+//  width:100%;
+//}
+//td + td {
+//  border-left:1px solid #eee;
+//}
+//td, th {
+//  border-bottom:1px solid #eee;
+//  background: #ddd;
+//  color: #000;
+//  padding: 10px 25px;
+//}
+//th {
+//  height: 0;
+//  line-height: 0;
+//  padding-top: 0;
+//  padding-bottom: 0;
+//  color: transparent;
+//  border: none;
+//  white-space: nowrap;
+//}
+//th div{
+//  position: absolute;
+//  background: transparent;
+//  color: #fff;
+//  padding: 9px 25px;
+//  top: 0;
+//  margin-left: -25px;
+//  line-height: normal;
+//  border-left: 1px solid #800;
+//}
+//th:first-child div{
+//  border: none;
+//}
+//
+//.item > table > thead > tr > td {
+//  border: black 2px solid;
+//}
+//
+//table > thead > tr > td,
+//table > tbody > tr > td {
+//  border-left: white 6px solid;
+//  border-right: white 6px solid;
+//}
 
 #showframe,
 .sidebar {

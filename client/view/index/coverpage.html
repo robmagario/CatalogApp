@@ -4,6 +4,78 @@
 
     <!--<script src="plugin/owl.carousel.js"></script>-->
     <!--<script src="assets/css/owl.carousel.js"></script>-->
+
+    <script>
+        $(document).ready(function(){
+            fnAdjustTable();
+        });
+
+        fnAdjustTable=function(){
+
+            var colCount=$('.firstTr>td').length; //get total number of column
+
+            var m=0;
+            var n=0;
+            var brow='mozilla';
+            jQuery.each(jQuery.browser, function(i, val) {
+                if(val==true){
+
+                    brow=i.toString();
+                }
+            });
+            $('.tableHeader').each(function(i){
+                if(m<colCount){
+
+                    if(brow=='mozilla'){
+                        $(this).find('#firstTd').css("width",$(this).find('.tableFirstCol').innerWidth());//for adjusting first td
+
+                        $(this).css('width',$(this).find('.table_div td:eq('+m+')').innerWidth());//for assigning width to table Header div
+                    }
+                    else if(brow=='msie'){
+                        $(this).find('#firstTd').css("width",$(this).find('.tableFirstCol').width());
+
+                        $(this).css('width',$(this).find('.table_div td:eq('+m+')').width()-2);//In IE there is difference of 2 px
+                    }
+                    else if(brow=='safari'){
+                        $(this).find('#firstTd').css("width",$(this).find('.tableFirstCol').width());
+
+                        $(this).css('width',$(this).find('.table_div td:eq('+m+')').width());
+                    }
+                    else{
+                        $(this).find('#firstTd').css("width",$(this).find('.tableFirstCol').width());
+
+                        $(this).css('width',$(this).find('.table_div td:eq('+m+')').innerWidth());
+                    }
+                }
+                m++;
+            });
+
+            $('.tableFirstCol').each(function(i){
+                if(brow=='mozilla'){
+                    $(this).css('height',$('.table_div td:eq('+colCount*n+')').outerHeight());//for providing height using scrollable table column height
+                }else if(brow=='msie'){
+
+                    $(this).css('height',$('.table_div td:eq('+colCount*n+')').innerHeight()-2);
+                }else{
+                    $(this).css('height',$('.table_div td:eq('+colCount*n+')').height());
+                }
+                n++;
+            });
+
+
+
+        }
+
+        //function to support scrolling of title and first column
+        fnScroll=function(){
+
+            $('.divHeader').scrollLeft($('.table_div').scrollLeft());
+            $('.firstcol').scrollTop($('.table_div').scrollTop());
+
+
+        }
+
+    </script>
 </head>
 
 <body data-hijacking="off" data-animation="scaleDown">
@@ -54,18 +126,18 @@
 
     <!--Mobile View-->
     {{#if IsMoblie}}
-        <nav class="navbar navbar-default" style="margin:0;  position:fixed; width:100%; z-index:3;">
+        <nav id="Navbar" class="navbar navbar-default" style="margin:0;  position:fixed; width:100%; z-index:3; display:none;">
             <div class="container-fluid" style="width:100%;">
                 <div class="navbar-header" style="margin-left:auto margin-right:auto; width:100%;">
                     <a class="navbar-brand" href="#"  style="margin-left:auto margin-right:auto; width:100%; text-align:center; position:absolute; font-size:32px; line-height:1.1;">Catalog App</a>
                 </div>
                 <div>
                     <ul class="nav navbar-nav">
-                        <li><a href="#"><span class="glyphicon glyphicon-menu-hamburger" style="transform:scale(2); z-index:2; width:100%;"></span></a></li>
+                        <li><a href="#"><span class="glyphicon glyphicon-menu-hamburger" style="transform:scale(2); z-index:2;"></span></a></li>
                     </ul>
-                    <ul class="nav navbar-nav navbar-right">
-                        <li><a href="#"><span class="glyphicon glyphicon-star" style="transform:scale(2);"></span></a></li>
-                    </ul>
+                    <!--<ul class="nav navbar-nav navbar-right">-->
+                        <!--<li><a href="#"><span class="glyphicon glyphicon-star" style="transform:scale(2);"></span></a></li>-->
+                    <!--</ul>-->
                 </div>
             </div>
         </nav>
@@ -101,7 +173,7 @@
                         <div class="testimonials-carousel">
                             <div class="item">
                                 <div class="row" style="width:100%; margin:0;">
-                                    <img src="img/esc-pile-logo-transparent.png">
+                                    <img id="AppCover" src="img/esc-pile-logo-transparent.png">
                                 </div>
                             </div>
                             <div class="item">
@@ -109,7 +181,7 @@
                                     <div class="chapter-header">Contents</div>
                                     <div class="contents-board">
                                         {{#each chapter_data}}
-                                            <div id="Content{{index}}" class="col-sm-3 pointer-to-chapter" style="min-height:200px;">
+                                            <div id="Content{{index}}" class="col-xs-3 pointer-to-chapter" style="min-height:200px; padding-top: 15px;;">
                                                 <div style="height:160px; border:solid 4px #AACCAA; overflow:hidden;"><img src="{{icon}}"></div>
                                                 <p style="font-size:20px; padding:5px;">{{name}}</p>
                                             </div>

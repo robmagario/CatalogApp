@@ -58,18 +58,19 @@
             </nav>
 
             <div id="Overview" class="page-item">
-                <table class="table table-hover">
+                <table id="ChapterTable" class="table table-hover">
+                    <caption>Chapter Table</caption>
                     <thead>
                     <tr>
-                        <th>Index</th>
-                        <th>Chapter Name</th>
-                        <th>Edit</th>
-                        <th>Delete</th>
+                        <th style="color:brown;">Index</th>
+                        <th style="color:brown;">Chapter Name</th>
+                        <th style="color:brown;">Edit</th>
+                        <th style="color:brown;">Delete</th>
                     </tr>
                     </thead>
                     <tbody>
                     {{#each chapter_data}}
-                        <tr>
+                        <tr class="chapter-each">
                             <td>{{index}}</td>
                             <td>{{name}}</td>
                             <td><button type="button" class="btn btn-info btn-sm chapter-edit-btn"  data-toggle="modal" data-target="#AddChapterModel">Edit</button></td>
@@ -77,6 +78,22 @@
                         </tr>
                     {{/each}}
                     </tbody>
+                </table>
+                <table id="PageTable" class="table table-hover" style="display:none;">
+                    <caption>Pape Table</caption>
+                    <thead>
+                    <tr>
+                        <th style="color:brown;">Page</th>
+                        <th style="color:brown;">Directory</th>
+                        <th style="color:brown;">Edit</th>
+                        <th style="color:brown;">Delete</th>
+                    </tr>
+                    </thead>
+                    <tbody id="PageTableBody">
+                    </tbody>
+                    <tr>
+                        <td><button type="button" class="btn btn-danger btn-sm page-back-btn">Back</button></td>
+                    </tr>
                 </table>
             </div>
 

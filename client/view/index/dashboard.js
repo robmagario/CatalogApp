@@ -35,6 +35,11 @@ Template.dashboard.events({
         $('#'+_value).find('alert').html("").hide();
         $('#'+_value).show();
 
+        $('#PageTableBody').html("");
+
+        $('#ChapterTable').show();
+        $('#PageTable').hide();
+
         $('#AddPage').find('input').val('');
         $('#AddPage').find('input').eq(1).val("");
         $('#AddPage').find('input').eq(2).val(1);
@@ -145,6 +150,29 @@ Template.dashboard.events({
     // Delete a chapter
     'click .chapter-delete-btn': function() {
         ChapterInfo.remove({_id:this._id});
+    },
+
+    // See Chapter Information
+    'click .chapter-each': function() {
+        var PageHTML = "";
+
+        var _data = PagesInfo.find({chapter:this.name});
+        if(_data != null) {
+            var _dataArray = _data.fetch();
+            for(var i=0; i<_dataArray.length; i++) {
+                PageHTML += "<tr>" +
+                    "<td>"+_dataArray[i].page+"</td>" +
+                    "<td>"+_dataArray[i].directory+"</td>" +
+                    "<td><button type='button' class='btn btn-info btn-sm page-edit-btn'  data-toggle='modal' data-target='#EditPageModel'>Edit</button></td>" +
+                    "<td><button type='button' class='btn btn-danger btn-sm page-delete-btn'>X</button></td>" +
+                    "</tr>";
+            }
+        }
+
+        $('#PageTableBodyBody').html(PageHTML);
+
+        $('#ChapterTable').hide();
+        $('#PageTable').show();
     },
 
     // Open Dropdown Menu

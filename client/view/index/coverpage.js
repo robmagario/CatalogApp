@@ -9,7 +9,13 @@ var FavbarOpen = false;
 var pdf_url = "";
 var pdf_page = 0;
 
+var SCW;
+var SCH;
+
 Template.cover.rendered = function() {
+    SCW = window.innerWidth;
+    SCH = window.innerHeight;
+
     if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
         MyBrowser = "Mobile";
     } else {
@@ -19,6 +25,20 @@ Template.cover.rendered = function() {
     // Set worker URL to package assets
     if (MyBrowser == "Mobile") {
     }
+    $('#AppCover').css({width:(SCW+"px"), height:(SCH+"px")});
+    $('.contents-board').css({height:((SCH * 0.85 - 50) + 'px')});
+    $('.testimonials').find('table').css({'max-height':(SCH * 0.8 + 'px')});
+
+    window.setTimeout(function() {
+        $('.tableHeader').each(function(i){
+            var _col_w = $(this).find('.firstTd').width();
+            var _col_h = $(this).find('.firstTd').height();
+
+            $(this).find('.table_div').css({width:((SCW-_col_w-50)+'px'),height:((SCH-_col_h-50)+'px')});
+            $(this).find('.divHeader').css({width:((SCW-_col_w-50)+'px')});
+            $(this).find('.firstcol').css({height:((SCH-_col_h-50)+'px')});
+        });
+    }, 5000);
 
 
     //var myScroll = new IScroll('#wrapper', {
@@ -162,7 +182,9 @@ Template.cover.events({
     // Open Narbar
     'click section': function(e) {
         if(e.pageY < 50) {
-
+            $('#Navbar').show();
+        } else {
+            $('#Navbar').hide();
         }
     },
 
@@ -260,7 +282,7 @@ Template.cover.events({
 
         var _url = this.info.url;
         if(MyBrowser == "Mobile") {
-            _url = _url.replace(/localhost:\d+/,"meteor.local");
+            //_url = _url.replace(/localhost:\d+/,"meteor.local");
             console.log(_url);
         }
         DrawPDF(_url, 1);
