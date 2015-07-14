@@ -26,11 +26,12 @@ Template.cover.rendered = function() {
     if (MyBrowser == "Mobile") {
     }
     $('#AppCover').css({width:(SCW+"px"), height:(SCH+"px")});
+    $('#AppHelp').css({width:((SCW+1)+"px"), height:((SCH+1)+"px")});
     $('.contents-board').css({height:((SCH * 0.85 - 50) + 'px')});
     $('.testimonials').find('table').css({'max-height':(SCH * 0.8 + 'px')});
 
     window.setTimeout(function() {
-        $('.tableHeader').each(function(i){
+        $('.table-scroll').each(function(i){
             var _col_w = $(this).find('.firstTd').width();
             var _col_h = $(this).find('.firstTd').height();
 
@@ -180,11 +181,18 @@ Template.cover.events({
     },
 
     // Open Narbar
-    'click section': function(e) {
+    'click section, click body, click .owl-wrapper': function(e) {
+        console.log('!!!');
+        console.log(e.pageY);
         if(e.pageY < 50) {
             $('#Navbar').show();
         } else {
             $('#Navbar').hide();
+        }
+        if(SidebarOpen) {
+            log.show("Close Sidebar");
+            $('.sidebar').css({left:'-40%', animation: 'SidebarClose 0.5s', '-webkit-animation': 'SidebarClose 0.5s'});
+            SidebarOpen = false;
         }
     },
 
@@ -218,6 +226,7 @@ Template.cover.events({
     'click .navbar-brand': function(e) {
         var owl = $(".owl-carousel").data('owlCarousel');
         owl.goTo(0);
+        $('#Navbar').hide();
         if(SidebarOpen) {
             log.show("Close Sidebar");
             $('.sidebar').css({left:'-40%', animation: 'SidebarClose 0.5s', '-webkit-animation': 'SidebarClose 0.5s'});
@@ -234,7 +243,7 @@ Template.cover.events({
         _page = _page.replace("Content","");
         _page = parseInt(_page);
         var owl = $(".owl-carousel").data('owlCarousel');
-        owl.goTo(_page - 1);
+        owl.goTo(_page);
 
         //if(_sidebar) {
         //    log.show("Close Sidebar");
@@ -246,6 +255,7 @@ Template.cover.events({
             $('.sidebar').css({left:'-40%', animation: 'SidebarClose 0.5s', '-webkit-animation': 'SidebarClose 0.5s'});
             SidebarOpen = false;
         }
+        $('#Navbar').hide();
         return null;
     },
 
@@ -322,6 +332,8 @@ Template.cover.events({
         $('.sidebar-item-sub').removeClass('active');
         e.currentTarget.classList.add('active');
         DrawPDF("/Test2.pdf", 1);
+
+        $('#Navbar').hide();
     },
 
     // Controls of the pdf

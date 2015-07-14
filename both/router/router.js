@@ -26,3 +26,6 @@ Router.route('/dashboard', function () {
     this.render('dashboard');
 });
 
+Router.route('/page', function () {
+    this.render('dashboard_page');
+});

@@ -154,13 +154,15 @@ Template.dashboard.events({
 
     // See Chapter Information
     'click .chapter-each': function() {
+        console.log(this);
+        console.log(PagesInfo.find({chapter:this.name}).count());
         var PageHTML = "";
 
-        var _data = PagesInfo.find({chapter:this.name});
+        var _data = PagesInfo.find({chapter:this.name}, {sort: {page:1}});
         if(_data != null) {
             var _dataArray = _data.fetch();
             for(var i=0; i<_dataArray.length; i++) {
-                PageHTML += "<tr>" +
+                PageHTML += "<tr id='"+_dataArray[i]._id+"'>" +
                     "<td>"+_dataArray[i].page+"</td>" +
                     "<td>"+_dataArray[i].directory+"</td>" +
                     "<td><button type='button' class='btn btn-info btn-sm page-edit-btn'  data-toggle='modal' data-target='#EditPageModel'>Edit</button></td>" +
@@ -169,10 +171,29 @@ Template.dashboard.events({
             }
         }
 
-        $('#PageTableBodyBody').html(PageHTML);
+        $('#PageTableBody').html(PageHTML);
 
         $('#ChapterTable').hide();
         $('#PageTable').show();
+    },
+
+    // Back to chapter overview
+    'click .page-back-btn': function() {
+        $('#PageTableBody').html("");
+
+        $('#ChapterTable').show();
+        $('#PageTable').hide();
+    },
+
+    // Edit a page
+    'click .page-edit-btn': function(e) {
+        window.open('/page#'+e.currentTarget.parentElement.parentElement.id);
+    },
+
+    // Delete a page
+    'click .page-delete-btn': function(e) {
+        e.currentTarget.parentElement.parentElement.remove();
+        PagesInfo.remove({_id:e.currentTarget.parentElement.parentElement.id});
     },
 
     // Open Dropdown Menu
@@ -486,7 +507,74 @@ Template.dashboard.helpers({
     }
 });
 
+Template.dashboard_page.rendered = function() {
+    $(document).ready(function() {
+        //$('#summernote').summernote();
+    });
+};
 
+Template.dashboard_page.events({
+    // Save Edit Page
+    'click .save-page': function() {
+        var uid = location.hash;
+        uid = uid.replace('#','');
+        var _directory = $('#EditPage').find('input').eq(0).val();
+        var _chapter = $('#EditPage').find('input').eq(1).val();
+        var _page = $('#EditPage').find('input').eq(2).val();
+        var _code = $('#summernote').code();
+        log.show("Directory: " + _directory);
+        log.show("Chapter: " + _chapter);
+        log.show("Page: " + _page);
+
+        if(isNaN(_page)) {
+            $('#EditPage').find('.alert').html("Incorrect Page").show();
+        } else {
+            PagesInfo.update({_id:uid}, {$set: {
+                directory: _directory,
+                chapter: _chapter,
+                page: _page,
+                code: _code,
+            }}, function() {
+                // Callback
+                alert("Page Edit Successfully!\n Click OK and this window will be closed.");
+                window.close();
+            });
+        }
+    }
+});
+
+Template.dashboard_page.helpers({
+    // Get Page Data
+    get_data: function() {
+        var uid = location.hash;
+        uid = uid.replace('#','');
+        return _data = PagesInfo.find({_id:uid});
+    },
+
+    // Get Chapter Data
+    chapter_data: function() {
+        return ChapterInfo.find({}, {sort: {index: 1}});
+    },
+
+    // Generate the code of the page
+    generate_code: function(_id) {
+        var uid = location.hash;
+        uid = uid.replace('#','');
+        var _data = PagesInfo.findOne({_id:uid});
+        if(_data != null) {
+            window.setTimeout(function() {
+                $('#'+_id).html(_data.code).summernote();
+                //$('#summernote').summernote();
+            }, 1000);
+            //$('#'+_id).html(_data.code);
+        }
+        return null;
+    },
+
+    'parse': function(value) {
+        return parseInt(value);
+    }
+});
 
 // Show Log
 log = {

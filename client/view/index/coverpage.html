@@ -11,69 +11,65 @@
         });
 
         fnAdjustTable=function(){
+            $('.table-scroll').each(function(j) {
+                var colCount=$(this).find('.firstTr>td').length; //get total number of column
 
-            var colCount=$('.firstTr>td').length; //get total number of column
+                var m=0;
+                var n=0;
+                var brow='mozilla';
+                jQuery.each(jQuery.browser, function(i, val) {
+                    if(val==true){
 
-            var m=0;
-            var n=0;
-            var brow='mozilla';
-            jQuery.each(jQuery.browser, function(i, val) {
-                if(val==true){
+                        brow=i.toString();
+                    }
+                });
 
-                    brow=i.toString();
-                }
+                $(this).find('.tableHeader').each(function (i) {
+                    if (m < colCount) {
+
+                        if (brow == 'mozilla') {
+                            $(this).find('.firstTd').css("width", $(this).find('.tableFirstCol').innerWidth());//for adjusting first td
+
+                            $(this).css('width', $(this).find('.table_div td:eq(' + m + ')').innerWidth());//for assigning width to table Header div
+                        }
+                        else if (brow == 'msie') {
+                            $(this).find('.firstTd').css("width", $(this).find('.tableFirstCol').width());
+
+                            $(this).css('width', $(this).find('.table_div td:eq(' + m + ')').width() - 2);//In IE there is difference of 2 px
+                        }
+                        else if (brow == 'safari') {
+                            $(this).find('.firstTd').css("width", $(this).find('.tableFirstCol').width());
+
+                            $(this).css('width', $(this).find('.table_div td:eq(' + m + ')').width());
+                        }
+                        else {
+                            $(this).find('.firstTd').css("width", $(this).find('.tableFirstCol').width());
+
+                            $(this).css('width', $(this).find('.table_div td:eq(' + m + ')').innerWidth());
+                        }
+                    }
+                    m++;
+                });
+
+                $(this).find('.tableFirstCol').each(function (i) {
+                    if (brow == 'mozilla') {
+                        $(this).css('height', $(this).find('.table_div td:eq(' + colCount * n + ')').outerHeight());//for providing height using scrollable table column height
+                    } else if (brow == 'msie') {
+                        $(this).css('height', $(this).find('.table_div td:eq(' + colCount * n + ')').innerHeight() - 2);
+                    } else {
+                        $(this).css('height', $(this).find('.table_div td:eq(' + colCount * n + ')').height());
+                    }
+                    n++;
+                });
             });
-            $('.tableHeader').each(function(i){
-                if(m<colCount){
-
-                    if(brow=='mozilla'){
-                        $(this).find('#firstTd').css("width",$(this).find('.tableFirstCol').innerWidth());//for adjusting first td
-
-                        $(this).css('width',$(this).find('.table_div td:eq('+m+')').innerWidth());//for assigning width to table Header div
-                    }
-                    else if(brow=='msie'){
-                        $(this).find('#firstTd').css("width",$(this).find('.tableFirstCol').width());
-
-                        $(this).css('width',$(this).find('.table_div td:eq('+m+')').width()-2);//In IE there is difference of 2 px
-                    }
-                    else if(brow=='safari'){
-                        $(this).find('#firstTd').css("width",$(this).find('.tableFirstCol').width());
-
-                        $(this).css('width',$(this).find('.table_div td:eq('+m+')').width());
-                    }
-                    else{
-                        $(this).find('#firstTd').css("width",$(this).find('.tableFirstCol').width());
-
-                        $(this).css('width',$(this).find('.table_div td:eq('+m+')').innerWidth());
-                    }
-                }
-                m++;
-            });
-
-            $('.tableFirstCol').each(function(i){
-                if(brow=='mozilla'){
-                    $(this).css('height',$('.table_div td:eq('+colCount*n+')').outerHeight());//for providing height using scrollable table column height
-                }else if(brow=='msie'){
-
-                    $(this).css('height',$('.table_div td:eq('+colCount*n+')').innerHeight()-2);
-                }else{
-                    $(this).css('height',$('.table_div td:eq('+colCount*n+')').height());
-                }
-                n++;
-            });
-
-
-
         }
 
         //function to support scrolling of title and first column
-        fnScroll=function(){
-
-            $('.divHeader').scrollLeft($('.table_div').scrollLeft());
-            $('.firstcol').scrollTop($('.table_div').scrollTop());
-
-
+        fnScroll=function(uid){
+            $('#'+uid).find('.divHeader').scrollLeft($('#'+uid).find('.table_div').scrollLeft());
+            $('#'+uid).find('.firstcol').scrollTop($('#'+uid).find('.table_div').scrollTop());
         }
+
 
     </script>
 </head>
@@ -129,11 +125,12 @@
         <nav id="Navbar" class="navbar navbar-default" style="margin:0;  position:fixed; width:100%; z-index:3; display:none;">
             <div class="container-fluid" style="width:100%;">
                 <div class="navbar-header" style="margin-left:auto margin-right:auto; width:100%;">
-                    <a class="navbar-brand" href="#"  style="margin-left:auto margin-right:auto; width:100%; text-align:center; position:absolute; font-size:32px; line-height:1.1;">Catalog App</a>
+                    <a class="navbar-brand" href="#"  style="margin-left:auto margin-right:auto; width:100%; text-align:center; position:absolute; font-size:32px; line-height:1.1; z-index:3;">Catalog App</a>
                 </div>
                 <div>
-                    <ul class="nav navbar-nav">
-                        <li><a href="#"><span class="glyphicon glyphicon-menu-hamburger" style="transform:scale(2); z-index:2;"></span></a></li>
+                    <ul class="nav navbar-nav" style="display:flex; display:-webkit-flex;">
+                        <li><a href="#"><span class="glyphicon glyphicon-menu-hamburger" style="transform:scale(2); z-index:4;"></span></a></li>
+                        <li><a href="#"><span class="glyphicon glyphicon-list" style="transform:scale(2); z-index:4;"></span></a></li>
                     </ul>
                     <!--<ul class="nav navbar-nav navbar-right">-->
                         <!--<li><a href="#"><span class="glyphicon glyphicon-star" style="transform:scale(2);"></span></a></li>-->
@@ -144,11 +141,23 @@
 
         <div class="sidebar" style="z-index:2; top:60px;">
             <ul class="nav nav-pills nav-stacked" style="height:100%; overflow:auto;">
-                <li id="Menu2" class="pointer-to-chapter sidebar-test">Content</li>
+                <!--<li id="Menu2" class="pointer-to-chapter sidebar-test">Content</li>-->
+                <div id="Menu0" class="pointer-to-chapter" style="max-height:100px; display:flex; display:-webkit-flex; background-color:white;">
+                    <div class="col-xs-5" style="height:100px; border:solid 4px #AACCAA; overflow:hidden; padding:0;"><img src="" width="160px"></div>
+                    <p class="col-xs-7" style="font-size:20px; padding:5px;">Cover</p>
+                </div>
+                <div id="Menu1" class="pointer-to-chapter" style="max-height:100px; display:flex; display:-webkit-flex; background-color:white;">
+                    <div class="col-xs-5" style="height:100px; border:solid 4px #AACCAA; overflow:hidden; padding:0;"><img src="" width="160px"></div>
+                    <p class="col-xs-7" style="font-size:20px; padding:5px;">Help</p>
+                </div>
+                <div id="Menu2" class="pointer-to-chapter" style="max-height:100px; display:flex; display:-webkit-flex; background-color:white;">
+                    <div class="col-xs-5" style="height:100px; border:solid 4px #AACCAA; overflow:hidden; padding:0;"><img src="" width="160px"></div>
+                    <p class="col-xs-7" style="font-size:20px; padding:5px;">Content</p>
+                </div>
                 {{#each chapter_data}}
                     <div id="Menu{{index}}" class="pointer-to-chapter" style="max-height:100px; display:flex; display:-webkit-flex; background-color:white;">
-                        <div style="width:160px; height:100px; border:solid 4px #AACCAA; overflow:hidden;"><img src="{{icon}}" width="160px"></div>
-                        <p style="font-size:20px; padding:5px;">{{name}}</p>
+                        <div class="col-xs-5" style="height:100px; border:solid 4px #AACCAA; overflow:hidden; padding:0;"><img src="{{icon}}" width="160px"></div>
+                        <p class="col-xs-7" style="font-size:20px; padding:5px;">{{name}}</p>
                     </div>
                 {{/each}}
             </ul>
@@ -166,14 +175,32 @@
             </ul>
         </div>
 
+        <div class="side-dropdown" style="z-index:2; top:60px;">
+
+        </div>
+
         <section class="testimonials bg-gray">
             <div class="container wow fadeIn">
                 <div class="row">
-                    <div class="col-lg-10 col-lg-offset-1">
+                    <!--col-lg-12 col-lg-offset-0-->
+                    <div class="">
                         <div class="testimonials-carousel">
                             <div class="item">
                                 <div class="row" style="width:100%; margin:0;">
-                                    <img id="AppCover" src="img/esc-pile-logo-transparent.png">
+                                    <!--<img id="AppCover" src="img/008.jpg" style="margin:-5px;">-->
+                                    <div id="AppCover" style="margin:0px; background-image:url(img/008.jpg); background-size: cover;">
+                                        <img id="AppCover" src="img/esc-pile-logo-transparent.png" style="width:128px;">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="item">
+                                <div class="row" style="width:100%; margin:0;">
+                                    <img id="AppHelp" src="img/sample2.png" style="margin:-1px;">
+                                    <!--<div id="AppHelp" style="margin:-5px; background-image:url(img/008.jpg); background-size: cover;">-->
+                                        <!--<p>-->
+                                            <!--Help Scene-->
+                                        <!--</p>-->
+                                    <!--</div>-->
                                 </div>
                             </div>
                             <div class="item">
