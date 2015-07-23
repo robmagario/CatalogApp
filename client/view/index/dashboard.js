@@ -286,8 +286,8 @@ Template.dashboard.events({
 
     // Click Upload
     'click .start': function (e) {
-        log.show("Start Upload!");
-        Uploader.startUpload.call(Template.instance(), e);
+        //log.show("Start Upload!");
+        //Uploader.startUpload.call(Template.instance(), e);
     },
 
     // Click Edit
@@ -406,6 +406,67 @@ Template.dashboard.events({
             log.show(this.directory + ' is not belonged to ' + Meteor.user().username + '.');
             alert("You cannot delete other users things");
         }
+    },
+
+    // Image Event
+    'click .image-add-btn': function() {
+        $('#AddImageModel').find('input').eq(0).val("");
+        $('#AddImageModel').find('input').eq(1).val("");
+        $('#AddImageModel').find('input').eq(2).val(1);
+        $('#AddImageModel').find('label').eq(5).html("");
+    },
+
+    'click .image-submit-btn': function() {
+        var _directory = $('#AddImageModel').find('input').eq(0).val();
+        var _chapter = $('#AddImageModel').find('input').eq(1).val();
+        var _index = parseInt($('#AddImageModel').find('input').eq(2).val());
+        var _link = $('#AddImageModel').find('label').eq(5).html();
+
+        if(_directory == "" || _directory == null) {
+            // Show if Chapter Name is Empty
+            $('#AddImageModel').find('.alert').html("<strong>Please defind a directory name!</strong>").show();
+        } else if(_chapter == "" || _chapter == null) {
+            // Show if Chapter Name is Empty
+            $('#AddImageModel').find('.alert').html("<strong>Please select the chapter of this page!</strong>").show();
+        } else if(isNaN(_index)) {
+            // Show if page index is not a number
+            $('#AddImageModel').find('.alert').html("<strong>Please make sure that the page column is a number</strong>").show();
+        } else if(_link == "" || _link == null) {
+            // Show if no icon
+            $('#AddImageModel').find('.alert').html("<strong>Please upload an image as icon</strong>").show();
+        } else {
+            // Let the origin index to be the next one
+            var _currentIndex = _index;
+            var _currentChapter = PagesInfo.findOne({page: _currentIndex});
+            while(_currentChapter != null) {
+                var _nextIndex = _currentIndex + 1;
+                var _nextChapter = PagesInfo.findOne({page: _nextIndex});
+                PagesInfo.update({_id: _currentChapter._id}, {$set: {
+                    page: _nextIndex
+                }});
+                _currentIndex = _nextIndex;
+                _currentChapter = _nextChapter;
+            }
+
+            var _date = new Date();
+            var _userId = Meteor.userId();
+            var _user = Meteor.user().username;
+
+            var _http = "<div style='width:100%;'><img src='"+_link+"'></div>";
+
+            // Insert Data
+            PagesInfo.insert({
+                userId: _userId,
+                username: _user,
+                directory: _directory,
+                chapter: _chapter,
+                page: _index,
+                code: _http,
+                createAt: _date
+            }, function() {
+                location.reload();
+            });
+        }
     }
 });
 
@@ -444,67 +505,89 @@ Template.dashboard.helpers({
         return Meteor.users.find({}, {sort: {username: 1}});
     },
 
-
-    // Callback after upload
-    uploadFinished: function() {
+    // Upload Image Callback
+    UploadImageCallback: function() {
         return {
-            finished: function(index, fileInfo, context) {
-                log.show("Upload Finish!")
-                var _directory = $('#AddPDF').find('input').eq(0).val();
-                if(_directory == null || _directory == "") {
-                    _directory = fileInfo.name;
+            finished: function (index, fileInfo, context) {
+                var _oldUrl = $('#AddImageModel').find('input').eq(2).val();
+                if (_oldUrl != null && _oldUrl != "") {
+                    var _oldPath = "";
+                    _oldPath = _oldUrl.replace(location.origin, "");
+                    _oldPath = _oldPath.replace("/upload", "");
                 }
-                var _sub_dirs_Array = $('#AddPDF_SubDir').find('input');
-                var _sub_dirs = [];
-                for(var i=0; i<_sub_dirs_Array.length/2; i++) {
-                    _sub_dirs.push({
-                        name: _sub_dirs_Array[i*2].value,
-                        page: parseInt(_sub_dirs_Array[i*2+1].value)
-                    })
+
+                var _url = "";
+                if (location.hostname.indexOf("localhost") < 0) {
+                    _url = "http://escgroup.net/upload" + fileInfo.path;
+                } else {
+                    _url = fileInfo.url;
+                    $('#AddImageModel').find('label').eq(5).html(_url);
                 }
-                var _index = parseInt($('#AddPDF').find('input').eq(1).val());
-                var _currentIndex = PDFFiles.findOne({pageindex: _index});
-                while(_currentIndex != null) {
-                    var _new_index = parseInt(_currentIndex.pageindex)+1;
-                    var _nextIndex = PDFFiles.findOne({pageindex: _new_index});
-                    PDFFiles.update({_id: _currentIndex._id}, {$set:{pageindex:_new_index}});
-                    _currentIndex = _nextIndex;
-                }
-                var _date = new Date().toUTCString();
-                var _userId = Meteor.userId();
-                var _user = Meteor.user().username;
-
-                // Inset data to database
-                PDFFiles.insert({
-                    pageindex: _index,
-                    directory: _directory,
-                    sub_dir:   _sub_dirs,
-                    createAt:  _date,
-                    createBy: {
-                        id:   _userId,
-                        name: _user
-                    },
-                    info: fileInfo
-                }, function() {
-                    log.show("Finish insert data to database.");
-
-                    // Show the Overview Page
-                    //$('#AddPDF').hide();
-                    //$('#Overview').show();
-                    //
-                    //// Active the tab of overview
-                    //$('.nav-tab').eq(0).addClass('active');
-                    //$('.nav-tab').eq(1).removeClass('active');
-
-                    // Alert
-                    alert(fileInfo.name + " is uploaded successfully");
-
-                    // Refresh
-                    location.reload();
-                });
             }
         }
     }
+
+
+    // Callback after upload
+    //uploadFinished: function() {
+    //    return {
+    //        finished: function(index, fileInfo, context) {
+    //            log.show("Upload Finish!")
+    //            var _directory = $('#AddPDF').find('input').eq(0).val();
+    //            if(_directory == null || _directory == "") {
+    //                _directory = fileInfo.name;
+    //            }
+    //            var _sub_dirs_Array = $('#AddPDF_SubDir').find('input');
+    //            var _sub_dirs = [];
+    //            for(var i=0; i<_sub_dirs_Array.length/2; i++) {
+    //                _sub_dirs.push({
+    //                    name: _sub_dirs_Array[i*2].value,
+    //                    page: parseInt(_sub_dirs_Array[i*2+1].value)
+    //                })
+    //            }
+    //            var _index = parseInt($('#AddPDF').find('input').eq(1).val());
+    //            var _currentIndex = PDFFiles.findOne({pageindex: _index});
+    //            while(_currentIndex != null) {
+    //                var _new_index = parseInt(_currentIndex.pageindex)+1;
+    //                var _nextIndex = PDFFiles.findOne({pageindex: _new_index});
+    //                PDFFiles.update({_id: _currentIndex._id}, {$set:{pageindex:_new_index}});
+    //                _currentIndex = _nextIndex;
+    //            }
+    //            var _date = new Date().toUTCString();
+    //            var _userId = Meteor.userId();
+    //            var _user = Meteor.user().username;
+    //
+    //            // Inset data to database
+    //            PDFFiles.insert({
+    //                pageindex: _index,
+    //                directory: _directory,
+    //                sub_dir:   _sub_dirs,
+    //                createAt:  _date,
+    //                createBy: {
+    //                    id:   _userId,
+    //                    name: _user
+    //                },
+    //                info: fileInfo
+    //            }, function() {
+    //                log.show("Finish insert data to database.");
+    //
+    //                // Show the Overview Page
+    //                //$('#AddPDF').hide();
+    //                //$('#Overview').show();
+    //                //
+    //                //// Active the tab of overview
+    //                //$('.nav-tab').eq(0).addClass('active');
+    //                //$('.nav-tab').eq(1).removeClass('active');
+    //
+    //                // Alert
+    //                alert(fileInfo.name + " is uploaded successfully");
+    //
+    //                // Refresh
+    //                location.reload();
+    //            });
+    //        }
+    //    }
+    //}
 });
 
 Template.dashboard_page.rendered = function() {

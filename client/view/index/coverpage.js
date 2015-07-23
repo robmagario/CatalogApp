@@ -111,7 +111,7 @@ Template.cover.rendered = function() {
             //],
             transitionStyle: "backSlide"
         });
-    }, 1000);
+    }, 5000);
 
     $(".each-chapter-carousel").owlCarousel({
         singleItem: true,

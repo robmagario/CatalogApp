@@ -25,6 +25,9 @@ if (Meteor.isServer) {
 
             UploadServer.delete(upload.info.path);
             PDFFiles.remove(_id);
+        },
+        'deleteImage': function(path) {
+            UploadServer.delete(path);
         }
     });
 }
