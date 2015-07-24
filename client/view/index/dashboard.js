@@ -51,6 +51,7 @@ Template.dashboard.events({
         $('#AddChapterModel').find('label').eq(0).html("");
         $('#AddChapterModel').find('input').eq(0).val("");
         $('#AddChapterModel').find('input').eq(1).val(1);
+        $('#AddChapterModel').find('label').eq(4).html("");
         // Hide Alert Message
         $('#AddChapterModel').find('.alert').hide();
         // Hide Edit Button
@@ -66,7 +67,8 @@ Template.dashboard.events({
         // Get value from the form
         var _chapter = $('#AddChapterModel').find('input').eq(0).val().trim();
         var _index = parseInt($('#AddChapterModel').find('input').eq(1).val());
-        var _icon = $('#AddChapterIcon').attr('src');
+        //var _icon = $('#AddChapterIcon').attr('src');
+        var _icon = $('#AddChapterModel').find('label').eq(4).html();
         if(_chapter == "" || _chapter == null) {
             // Show if Chapter Name is Empty
             $('#AddChapterModel').find('.alert').html("<strong>Please defind a name for the new chapter!</strong>").show();
@@ -106,6 +108,7 @@ Template.dashboard.events({
         $('#AddChapterModel').find('label').eq(0).html(this._id);
         $('#AddChapterModel').find('input').eq(0).val(this.name);
         $('#AddChapterModel').find('input').eq(1).val(this.index);
+        $('#AddChapterModel').find('label').eq(4).html(this.icon);
         // Hide Alert Message
         $('#AddChapterModel').find('.alert').hide();
         // Hide Edit Button
@@ -118,6 +121,7 @@ Template.dashboard.events({
         var _id = $('#AddChapterModel').find('label').eq(0).html();
         var _chapter = $('#AddChapterModel').find('input').eq(0).val().trim();
         var _index = parseInt($('#AddChapterModel').find('input').eq(1).val());
+        var _icon = $('#AddChapterModel').find('label').eq(4).html();
         if(_chapter == "" || _chapter == null) {
             // Show if Chapter Name is Empty
             $('#AddChapterModel').find('.alert').html("<strong>Please defind a name for the new chapter!</strong>").show();
@@ -140,7 +144,8 @@ Template.dashboard.events({
             // Insert Data
             ChapterInfo.update({_id:_id}, {$set: {
                 name: _chapter,
-                index: _index
+                index: _index,
+                icon: _icon
             }}, function() {
                 location.reload();
             });
@@ -505,6 +510,21 @@ Template.dashboard.helpers({
         return Meteor.users.find({}, {sort: {username: 1}});
     },
 
+    // Upload Icon Callback
+    UploadIconCallback: function() {
+        return {
+            finished: function (index, fileInfo, context) {
+                var _url = "";
+                if (location.hostname.indexOf("localhost") < 0) {
+                    _url = "http://escgroup.net/upload" + fileInfo.path;
+                } else {
+                    _url = fileInfo.url;
+                }
+                $('#AddChapterModel').find('label').eq(4).html(_url);
+            }
+        }
+    },
+
     // Upload Image Callback
     UploadImageCallback: function() {
         return {
@@ -521,8 +541,8 @@ Template.dashboard.helpers({
                     _url = "http://escgroup.net/upload" + fileInfo.path;
                 } else {
                     _url = fileInfo.url;
-                    $('#AddImageModel').find('label').eq(5).html(_url);
                 }
+                $('#AddImageModel').find('label').eq(5).html(_url);
             }
         }
     }
