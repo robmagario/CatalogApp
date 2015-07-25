@@ -520,6 +520,7 @@ Template.dashboard.helpers({
                 } else {
                     _url = fileInfo.url;
                 }
+                _url = _url.replace(/\s/g,"%20");
                 $('#AddChapterModel').find('label').eq(4).html(_url);
             }
         }
@@ -534,6 +535,7 @@ Template.dashboard.helpers({
                     var _oldPath = "";
                     _oldPath = _oldUrl.replace(location.origin, "");
                     _oldPath = _oldPath.replace("/upload", "");
+                    _oldPath = _oldPath.replace(/%20/g, " ");
                 }
 
                 var _url = "";
@@ -542,6 +544,7 @@ Template.dashboard.helpers({
                 } else {
                     _url = fileInfo.url;
                 }
+                _url = _url.replace(/\s/g,"%20");
                 $('#AddImageModel').find('label').eq(5).html(_url);
             }
         }
