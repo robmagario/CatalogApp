@@ -13,6 +13,7 @@ var SCW;
 var SCH;
 
 Template.cover.rendered = function() {
+    console.log('rendered'+' loaded');
     SCW = window.innerWidth;
     SCH = window.innerHeight;
 
@@ -421,9 +422,7 @@ function DrawPDF(url, page) {
             canvas.width = viewport.width;
 
             // Render PDF page into canvas context
-            page.render({canvasContext: context, viewport: viewport}).promise.then(function () {
-
-            });
+            page.render({canvasContext: context, viewport: viewport}).promise.then(function () {});
 
             pdf_url = url;
             pdf_page = _page;

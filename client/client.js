@@ -5,6 +5,7 @@
 this.Helpers = {};
 
 Meteor.startup(function() {
+    console.log('client.js'+' loaded');
     //Uploader.finished = function(index, fileInfo, templateContext) {
     //    console.log(fileInfo);
     //}
